@@ -1,0 +1,40 @@
+table#evidencias-canal-etico-admin {
+    width: 50em;
+    margin-top: 30px; 
+    background: #ffffff;
+    padding: 20px 40px;
+    border-radius: 10px;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+table#evidencias-canal-etico-admin tr > * {
+    padding: 20px;
+    border-bottom: 1px solid #002855;
+    color: #002855;
+}
+
+table#evidencias-canal-etico-admin tr:first-child {
+    background: #002855;
+    color: #ffffff;
+}
+
+table#evidencias-canal-etico-admin tr > th {
+    color: #fff;
+    font-weight: 600; 
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+table#evidencias-canal-etico-admin tr:last-child > * {
+    border: none;
+}
+
+table#evidencias-canal-etico-admin tr > * a {
+    color: #fff;
+    background: #00ccb6;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 5px 20px;
+    border-radius: 10px;
+}

@@ -1,0 +1,8 @@
+span.cf-field__asterisk {
+    padding-left: 6px;
+    &::after {
+        content: "obligatorio";
+        font-style: italic;
+        font-size: 10px;
+    }
+}

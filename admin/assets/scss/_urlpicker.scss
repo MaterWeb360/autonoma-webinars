@@ -1,0 +1,27 @@
+span.carbon-fields--urlpicker {
+    border: 1px solid #555d66;
+    padding: 10px 20px;
+    border-radius: 3px;
+    span {
+        strong,
+        small {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        strong::before {
+            content: "Url: ";
+            font-weight: 700;
+        }
+        small {
+            padding-top: 8px;
+            display: block;
+            &::before {
+                content: "Titulo: ";
+                font-weight: 700;
+            }
+            em{
+                font-style: normal;
+            }
+        }
+    }
+}

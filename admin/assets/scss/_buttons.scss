@@ -1,0 +1,77 @@
+@import "colors";
+
+/* * 
+ * Botones de acción
+ * */
+
+.cf-file__remove:before {
+  background-color: $color_borrar !important;
+}
+
+button.cf-complex__group-action {
+  span.dashicons-before.dashicons-trash.cf-complex__group-action-icon {
+    color: $color_borrar !important;
+  }
+  span.dashicons-before.dashicons-admin-page.cf-complex__group-action-icon {
+    color: $color_alerta !important;
+  }
+  span.dashicons-before.cf-complex__group-action-icon.dashicons-arrow-up {
+    color: $color_estado;
+  }
+}
+
+.cf-complex__actions {
+  .cf-complex__inserter {
+    button.button.cf-complex__inserter-button {
+      background-color: $color_accion;
+      border-color: $color_accion;
+      color: #ffffff;
+    }
+  }
+  button.button.cf-complex__toggler {
+    background-color: $color_estado;
+    border-color: $color_estado;
+    color: #ffffff;
+  }
+}
+
+.cf-complex__inserter {
+  button.button.cf-complex__inserter-button {
+    background-color: $color_accion;
+    border-color: $color_accion;
+    color: #ffffff;
+  }
+}
+
+.cf-media-gallery__actions {
+  .cf-media-gallery__browse {
+    background-color: $color_accion;
+    border-color: $color_accion;
+    color: #ffffff;
+    &:hover {
+      background-color: $color_accion;
+      border-color: $color_accion;
+      color: #ffffff;
+    }
+  }
+}
+
+#btn-seguridad {
+  background-color: $color_accion;
+  color: #ffffff;
+  padding: 10px 20px;
+  font-size: 13px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+#plugins-proceso {
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  p {
+    font-weight: bold;
+    font-size: 16px;
+  }
+}

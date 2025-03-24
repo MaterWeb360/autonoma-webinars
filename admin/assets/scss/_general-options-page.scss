@@ -1,0 +1,31 @@
+/* * 
+ * Diseño página de opciones globales
+ * */
+.toplevel_page_crb_carbon_fields_container_opciones_generales {
+    #wpwrap {
+        background: #ffffff;
+        div#carbon_fields_container_opciones_generales {
+            border: none !important;
+        }
+
+        .cf-container__tabs {
+            li.cf-container__tabs-item {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }
+        }
+
+        .cf-container__fields {
+            margin-top: 30px;
+            .cf-field.cf-separator {
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+                margin-top: 30px;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+        }
+    }
+}

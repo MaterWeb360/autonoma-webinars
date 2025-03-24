@@ -1,0 +1,30 @@
+@import "colors";
+
+/* * 
+ * Input de imagenes y archivos 
+ * */
+.cf-file__inner {
+    width: 100% !important;
+}
+
+/* * 
+ * Input Tiny 
+ * */
+.wp-editor-container {
+    .mce-edit-area {
+        & > iframe {
+            min-height: 200px !important;
+        }
+    }
+}
+
+/* * 
+ * Input URLPicker 
+ * */
+.cf-field.cf-urlpicker {
+    span.button.button-secondary {
+        background: $color_accion;
+        border-color: $color_accion;
+        color: #ffffff;
+    }
+}

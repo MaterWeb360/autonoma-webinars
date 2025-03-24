@@ -1,0 +1,32 @@
+/* * 
+ * Complex Grid de Columnas 
+ * */
+@mixin complex_grid_col($numero_columnas) {
+    /* #{$numero_columnas} Columnas */
+    .complex_col_#{$numero_columnas} {
+        & .cf-complex__group {
+            &.cf-complex__group--grid {
+                width: 100% / $numero_columnas;
+                height: auto;
+                display: inline-block;
+            }
+        }
+
+        & .ui-sortable-placeholder {
+            display: inline-block !important;
+            width: 100% / $numero_columnas !important;
+            height: 0px !important;
+        }
+
+        & .ui-sortable-helper {
+            height: 0px !important;
+            width: 100% / $numero_columnas !important;
+        }
+    }
+}
+
+@include complex_grid_col(2);
+@include complex_grid_col(3);
+@include complex_grid_col(4);
+@include complex_grid_col(5);
+@include complex_grid_col(6);

@@ -1,0 +1,78 @@
+@import "colors";
+
+/* * 
+ * Separador del tema 
+ * */
+.separator_theme {
+    background: $color_principal;
+    padding: 0px 9px !important;
+    .cf-field__body {
+        h3 {
+            color: #ffffff;
+            font-size: 16px;
+        }
+    }
+}
+
+/* * 
+ * Separador del tema en plantillas 
+ * */
+.postbox.carbon-box {
+    margin-bottom: 30px;
+
+    /* Cabecera */
+    & .postbox-header {
+        background: $color_principal;
+        color: #fff;
+        padding: 0px 9px !important;
+        h2.hndle.ui-sortable-handle {
+            color: #fff !important;
+            font-size: 16px !important;
+            padding: 0 !important;
+        }
+        .handle-actions.hide-if-no-js {
+            button,
+            span {
+                color: #fff;
+            }
+        }
+    }
+
+    /* Cuerpo */
+    & .inside {
+        box-shadow: 0px 0px 10px 1px #0000002e;
+        margin: 10px 20px 0 !important;
+        padding: 10px 10px !important;
+        border-radius: 10px;
+        /* overflow: hidden; */
+        .cf-container__fields {
+            border: none !important;
+            .cf-field {
+                border: none !important;
+            }
+        }
+    }
+}
+
+/* *
+ * Pestañas 
+ * */
+.cf-container__tabs {
+    ul.cf-container__tabs-list {
+        li.cf-container__tabs-item.cf-container__tabs-item--current {
+            background: $color_principal;
+            font-weight: 500;
+        }
+        li.cf-container__tabs-item {
+            background: $color_null;
+            font-weight: 100;
+            cursor: pointer !important;
+            padding: 2px 0px;
+            font-size: 14px;
+            button {
+                color: #ffffff;
+                cursor: pointer !important;
+            }
+        }
+    }
+}
