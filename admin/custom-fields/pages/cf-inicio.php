@@ -4,7 +4,11 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
 Container::make('post_meta', 'header', 'Cabecera')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('text', 'he-etiqueta', 'Etiqueta superior'),
         Field::make('textarea', 'he-titulo', 'Título')
@@ -18,7 +22,11 @@ Container::make('post_meta', 'header', 'Cabecera')
     ]);
 
 Container::make('post_meta', 'formulario', 'Formulario')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('complex', 'complex_form_2', __('Campos de formulario'))
             ->setup_labels(['plural_name' => 'Campos de formulario', 'singular_name' => 'Campo de formulario'])
@@ -109,7 +117,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         array(
                             'field' => 'campos',
-                            'value' => ['1', '2'],
+                            'value' => ['1', '2','3'],
                             'compare' => 'IN',
                         ),
                     ))
@@ -185,7 +193,11 @@ Container::make('post_meta', 'formulario', 'Formulario')
     ]);
 
 Container::make('post_meta', 'infoini', 'Información inicial')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'in-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),
@@ -204,7 +216,11 @@ Container::make('post_meta', 'infoini', 'Información inicial')
     ]);
 
 Container::make('post_meta', 'beneficios', 'Beneficios')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'be-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),
@@ -215,7 +231,11 @@ Container::make('post_meta', 'beneficios', 'Beneficios')
     ]);
 
 Container::make('post_meta', 'video', 'Video')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'vi-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),
@@ -230,7 +250,11 @@ Container::make('post_meta', 'video', 'Video')
     ]);
 
 Container::make('post_meta', 'expositor', 'Expositor')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'ex-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),
@@ -244,7 +268,11 @@ Container::make('post_meta', 'expositor', 'Expositor')
     ]);
 
 Container::make('post_meta', 'webinars', 'Webinars')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'we-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),
@@ -267,7 +295,11 @@ Container::make('post_meta', 'webinars', 'Webinars')
     ]);
 
 Container::make('post_meta', 'carreras', 'Carreras')
-    ->where('post_id', '=', get_option('page_on_front'))
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
     ->add_fields([
         Field::make('checkbox', 'ca-show', '¿Ocultar Sección?')
             ->set_option_value('yes'),

@@ -37,11 +37,22 @@
       }
     });
   </script>
+  
 
   <?php
   wp_head();
   $script_header = globalCampo('g_script_header');
   echo $script_header;
   ?>
-
+<style>
+    .form__input-wrapper{
+      display:flex;
+      justify-content: space-between;
+      flex-wrap:wrap;
+      gap:0.5rem;
+    }
+    .selectWP{
+      margin-bottom:0;background: transparent;border: none;
+    }
+  </style>
 </head>
