@@ -126,41 +126,23 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         '2t' => '100%',
                     )),
 
-                Field::make('complex', 'selecciones_campo', __('Opciones de selección'))
-                    ->setup_labels(['plural_name' => 'Opciones', 'singular_name' => 'Opción'])
-                    ->set_help_text('Ingresar la opción para mostrar en la lista de selección')
-                    ->set_width(100)
-                    ->set_layout('tabbed-vertical')
-                    ->set_required(true)
-                    ->set_conditional_logic(array(
+                Field::make('association', 'nombre_seleccion', __('Carreras'))
+                    ->set_types([
+                        [
+                            'type'      => 'post',
+                            'post_type' => 'carreras', // Asegúrate de que el post type se llame "carreras"
+                        ],
+                    ])
+                    ->set_help_text('Selecciona hasta 3 carreras')
+                    ->set_conditional_logic([
                         'relation' => 'AND',
-                        array(
-                            'field' => 'campos',
-                            'value' => ['3'],
+                        [
+                            'field'   => 'campos',
+                            'value'   => ['3'],
                             'compare' => 'IN',
-                        ),
-                    ))
-                    ->add_fields(array(
-                        Field::make('text', 'nombre_seleccion', __('Opción'))
-                            ->set_conditional_logic(array(
-                                'relation' => 'AND',
-                                array(
-                                    'field' => 'parent.campos',
-                                    'value' => ['3'],
-                                    'compare' => 'IN',
-                                ),
-                            )),
-                        Field::make('text', 'valor_seleccion', __('Valor'))
-                            ->set_conditional_logic(array(
-                                'relation' => 'AND',
-                                array(
-                                    'field' => 'parent.campos',
-                                    'value' => ['3'],
-                                    'compare' => 'IN',
-                                ),
-                            )),
-                    ))
-                    ->set_header_template('Opción <%- $_index + 1 %>'),
+                        ],
+                    ]),
+                
 
                 Field::make('complex', 'opciones_campo', __('Opciones para selección unica'))
                     ->setup_labels(['plural_name' => 'Opciones', 'singular_name' => 'Opción'])

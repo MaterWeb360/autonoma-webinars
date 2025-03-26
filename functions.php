@@ -57,3 +57,33 @@ require_once TEMA_LOGIN . '/login.php';
  * Helpers
  **/
 require_once TEMA_HELPERS . '/helpers.php';
+
+
+function registrar_cpt_carreras() {
+    $args = [
+        'labels' => [
+            'name'          => __('Carreras'),
+            'singular_name' => __('Carrera'),
+            'add_new'       => __('Añadir Nueva'),
+            'add_new_item'  => __('Añadir Nueva Carrera'),
+            'edit_item'     => __('Editar Carrera'),
+            'new_item'      => __('Nueva Carrera'),
+            'view_item'     => __('Ver Carrera'),
+            'search_items'  => __('Buscar Carreras'),
+            'not_found'     => __('No se encontraron carreras'),
+            'not_found_in_trash' => __('No se encontraron carreras en la papelera'),
+        ],
+        'public'       => true,
+        'has_archive'  => true,
+        'rewrite'      => ['slug' => 'carreras'],
+        'supports'     => ['title', 'editor', 'thumbnail'],
+        'menu_icon'    => 'dashicons-welcome-learn-more',
+    ];
+
+    register_post_type('carreras', $args);
+}
+add_action('init', 'registrar_cpt_carreras');
+
+
+
+

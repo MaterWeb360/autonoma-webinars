@@ -10,7 +10,7 @@ $complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
 
     <?php
     foreach ($complex_form_data as $key => $dataVf) {
-        
+        //var_dump($dataVf);
         $placeholder = $dataVf['placehonder_campo'];
         $name = $dataVf['nombre_campo'];
         $value = $dataVf['valor_campo'];
@@ -20,7 +20,8 @@ $complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
         //options
         $options = $dataVf['opciones_campo'];
         //seleccionables
-        $seleccionable = $dataVf['selecciones_campo'];
+        $seleccionable = $dataVf['nombre_seleccion'];
+        
 
         if($tamano == '1t'){
             $tamanoStylo = '47%';
@@ -37,7 +38,10 @@ $complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                 echo '<select name="'.$name.'" class="form__select w-select selectWP" >';
                 echo '<option value="">'.$placeholder.'</option>';
                 foreach ($seleccionable as $key => $seOptions) {
-                    echo '<option value="'.$seOptions['valor_seleccion'].'">'.$seOptions['nombre_seleccion'].'</option>';
+                    $post_id = $seOptions['id']; // ID correcto del post carrera
+                    $post_title = get_the_title($post_id); // Obtener el nombre de la carrera
+                
+                    echo '<option value="'.$seOptions['id'].'">'.esc_html($post_title).'</option>';
                 }
                 echo '</select>';
                 echo '</div>';
