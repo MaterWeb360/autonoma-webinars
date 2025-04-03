@@ -9,64 +9,7 @@ $complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
     <div class="form__input-wrapper">
 
     <?php
-    foreach ($complex_form_data as $key => $dataVf) {
-        //var_dump($dataVf);
-        $placeholder = $dataVf['placehonder_campo'];
-        $name = $dataVf['nombre_campo'];
-        $value = $dataVf['valor_campo'];
-        $tamano = $dataVf['tamano_campo'];
-        $tipodecampo = $dataVf['campos'];
-        $tipodetexto = $dataVf['tipo_texto_campo'];
-        //options
-        $options = $dataVf['opciones_campo'];
-        //seleccionables
-        $seleccionable = $dataVf['nombre_seleccion'];
-        
-
-        if($tamano == '1t'){
-            $tamanoStylo = '47%';
-        }else{
-            $tamanoStylo = '100%';
-        }
-
-        switch ($tipodecampo) {
-            case '1': 
-                echo '<input name="'.$name.'" placeholder="'.$placeholder.'" type="text" style="width:'.$tamanoStylo.'" class="form__input-select-wrapper w-input">';
-                break;
-            case '3':
-                echo '<div class="form__input-select-wrapper" style="width:'.$tamanoStylo.'">';              
-                echo '<select name="'.$name.'" class="form__select w-select selectWP" >';
-                echo '<option value="">'.$placeholder.'</option>';
-                foreach ($seleccionable as $key => $seOptions) {
-                    $post_id = $seOptions['id']; // ID correcto del post carrera
-                    $post_title = get_the_title($post_id); // Obtener el nombre de la carrera
-                
-                    echo '<option value="'.$seOptions['id'].'">'.esc_html($post_title).'</option>';
-                }
-                echo '</select>';
-                echo '</div>';
-                break; 
-            case '4': 
-                echo '<div class="form_botons" style="display:flex !important;flex-flow: row;flex-wrap:wrap; width:100%">';
-                echo '<div class="text-size-small" style="width:100%">'.$placeholder.'</div>';
-                $idOp = 1;
-                foreach ($options as $key => $opcionesV) {
-                    
-                    echo '<label class="radio-button w-radio" style="width:48% !important">';  
-                    echo '<div class="w-form-formradioinput w-form-formradioinput--inputType-custom radio-button-icon w-radio-input"></div>';
-                    echo '<input type="radio" name="'.$name.'" id="'.$idOp.'" value="'.$opcionesV['opcion_seleccion'].'" style="opacity:0;position:absolute;z-index:-1">';
-                    echo '<span class="radio-button-label w-form-label" for="'.$idOp.'">'.$opcionesV['opcion_seleccion'].'</span>';
-                    echo '</label>';
-                    $idOp++;
-                }
-                echo '</div>';
-                break;
-            case '5': 
-                echo '<input type="hidden" value="'.$value.'" name="'.$name.'">';
-                break;
-        }
-
-    }
+        var_dump($complex_form_data);
     ?>
     <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
 </div>
