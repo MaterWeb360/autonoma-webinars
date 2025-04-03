@@ -189,7 +189,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             ->set_width(100)
                             ->set_options([
                                 '1' => 'Campo de Texto',
-                                '3' => 'Campo de Selección Simple',
+                                //'3' => 'Campo de Selección Simple',
                                 '4' => 'Campo de Selección multiple',
                                 '6' => 'Campo de Selección de Carreras',
                             ])
