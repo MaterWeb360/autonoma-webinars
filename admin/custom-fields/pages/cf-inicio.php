@@ -33,91 +33,89 @@ Container::make('post_meta', 'formulario', 'Formulario')
             ->set_collapsed(true)
             ->add_fields(array(
 
+                //1ERA SELECCIÓN DE TIPO DE CAMPOS - 1ER PASO
                 Field::make('select', 'campos', __('Elegir campo'))
                     ->set_width(100)
                     ->set_options([
-                        '1' => 'Campo general texto (input text)',
-                        '3' => 'Campo general selección (select)',
-                        '4' => 'Campo de opciones (radios)',
-                        '5' => 'Campo oculto (input text hidden)',
+                        '1' => 'Campo de Texto',
+                        '3' => 'Campo de Selección',
+                        '4' => 'Campo de Opciones',
+                        '5' => 'Campo Oculto',
+                        '6' => 'Campo de Selección de Carreras',
                     ]),
-
-                Field::make('text', 'placehonder_campo', 'Mensaje del campo (placeholder)')
-                    ->set_help_text('Mensaje del campo que aparecerá como indicación. Ejemplo: "Ingresar apellidos", "Ingresar DNI"')
+                
+                //CAMPO TEXTO - NOMBRE DEL CAMPO (placeholder o label) (Para tipo: text, select, radio, select carreras)
+                Field::make('text', 'campo_placeholder_label', 'Título del campo')
+                    ->set_help_text('Guía para el usuario de lo que debe hacer en el campo; Ejm: Apellidos o Escribe tu nombre')
+                    ->set_width(100)
+                    ->set_required(true)
+                    ->set_conditional_logic([
+                        'relation' => 'AND',
+                        [
+                            'field' => 'campos',
+                            'value' => ['1','4'],
+                            'compare' => 'IN',
+                        ],
+                    ]),
+                //CAMPO TEXTO - NOMBRE DE la PRIMERA OPCION DEL CAMPO SELECCION (primera opción) (Para tipo: select)
+                Field::make('text', 'campo_placeholder_select', 'Primera opción del select')
+                    ->set_help_text('Aparecerá como primera opción del select, pero será NO SELECCIONABLE, es un título')
                     ->set_width(27)
                     ->set_required(true)
                     ->set_conditional_logic([
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['1', '2', '3', '4'],
+                            'value' => ['3','6'],
                             'compare' => 'IN',
                         ],
                     ]),
-
-                Field::make('text', 'nombre_campo', 'Nombre del campo (name)')
-                    ->set_help_text('Nombre de valor del campo, NO utilizar espacios en blanco. Ejemplo: "Apellidos", "DNI", "primer_nombre"')
+                //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                Field::make('text', 'campo_name', 'Identificador de las opciones')
+                    ->set_help_text('Ejm: nModalidad, nSubPrograma, nPrograma')
+                    ->set_width(27) 
+                    ->set_required(true)
+                    ->set_conditional_logic([
+                        'relation' => 'AND',
+                        [
+                            'field' => 'campos',
+                            'value' => ['1', '3', '4', '5','6'],
+                            'compare' => 'IN',
+                        ],
+                    ]),
+                //CAMPO TEXTO - VALUE (Para tipo:  radio, hidden)
+                Field::make('text', 'campo_value', 'Dato/código guardado o a guardar')
+                    ->set_help_text('Ejm: 0, 10, 21, 17')
                     ->set_width(27)
-                    ->set_required(true)
                     ->set_conditional_logic([
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['1', '2', '3', '4', '5'],
+                            'value' => [ '4', '5'],
                             'compare' => 'IN',
                         ],
                     ]),
-
-                Field::make('text', 'valor_campo', 'Valor del campo predeterminado (value)')
-                    ->set_help_text('Asignar un valor predeterminado para el campo')
-                    ->set_width(30)
+                //CAMPO TEXTO - NAME DE LAS OPCIONES DE UN SELECT (Para tipo: select)
+                Field::make('text', 'campo_value_seleccionado', 'Identificador del campo')
+                    ->set_help_text('Ejm: cModalidad,cSubPrograma')
+                    ->set_width(50)
                     ->set_conditional_logic([
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => '5',
-                            'compare' => '=',
+                            'value' => ['3','6'],
+                            'compare' => 'IN',
                         ],
                     ]),
-
-                Field::make('select', 'tipo_texto_campo', 'Tipo de campo de texto')
-                    ->set_width(26)
-                    ->set_required(true)
-                    ->set_conditional_logic([
-                        'relation' => 'AND',
-                        [
-                            'field' => 'campos',
-                            'value' => '1',
-                            'compare' => '=',
-                        ],
-                    ])
-                    ->set_options([
-                        '1a' => 'Texto',
-                        '2b' => 'E-mail',
-                        '3c' => 'Numerico'
-                    ]),
-
-                Field::make('text', 'limite_campo', 'Limite de digitos')
-                    ->set_help_text('Cantidad de digitos permitidos')
-                    ->set_width(10)
-                    ->set_required(true)
-                    ->set_conditional_logic([
-                        'relation' => 'AND',
-                        [
-                            'field' => 'tipo_texto_campo',
-                            'value' => '3c',
-                            'compare' => '=',
-                        ],
-                    ]),
-
-                Field::make('select', 'tamano_campo', 'Tamaño de campo')
-                    ->set_width(10)
-                    ->set_required(true)
+                
+                //CAMPO SELECCIONABLE TAMAÑO - ELECCION DE TAMAÑO DE CAMPO (1,3)
+                Field::make('select', 'campo_tamano', 'Tamaño')
+                    ->set_width(8)
                     ->set_conditional_logic(array(
                         'relation' => 'AND',
                         array(
                             'field' => 'campos',
-                            'value' => ['1', '2','3'],
+                            'value' => ['1','3','4','6'],
                             'compare' => 'IN',
                         ),
                     ))
@@ -125,25 +123,398 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         '1t' => '50%',
                         '2t' => '100%',
                     )),
-
-                Field::make('association', 'nombre_seleccion', __('Carreras'))
-                    ->set_types([
-                        [
-                            'type'      => 'post',
-                            'post_type' => 'carreras', // Asegúrate de que el post type se llame "carreras"
-                        ],
-                    ])
-                    ->set_help_text('Selecciona hasta 3 carreras')
-                    ->set_conditional_logic([
+                
+                //CAMPO SELECT
+                Field::make('complex', 'campo_select', __('Campo de selección'))
+                    ->setup_labels(['plural_name' => 'Selecciones', 'singular_name' => 'Selección'])
+                    ->set_help_text('Agregar Items al Seleccionable')
+                    ->set_width(100)
+                    ->set_layout('tabbed-vertical')
+                    ->set_conditional_logic(array(
                         'relation' => 'AND',
-                        [
-                            'field'   => 'campos',
-                            'value'   => ['3'],
-                            'compare' => 'IN',
-                        ],
+                        array(
+                            'field' => 'campos',
+                            'value' => '3',
+                            'compare' => '=',
+                        ),
+                    ))
+                    ->add_fields(array(
+                        
+                        //PLACEHOLDER - TEXT PARA ESCRIBIR LA PRIMERA OPCION DEL SELECT 
+                        Field::make('text', 'campo_select_placeholder', __('Nombre del seleccionable'))
+                            ->set_help_text('El valor que se agregue aquí, viajará con el nombre del "Identificador del campo"')
+                            ->set_width(50)
+                            ->set_conditional_logic(array(
+                                'relation' => 'AND',
+                                array(
+                                    'field' => 'parent.campos',
+                                    'value' => '3',
+                                    'compare' => '=',
+                                ),
+                            )),
+                        
+                        //VALUE - TEXT PARA ESCRIBIR EL CODIGO A GUARDAR
+                        Field::make('text', 'campo_select_value', __('Texto o código a guardar'))
+                            ->set_help_text('El valor que se agregue aquí, viajará con el nombre del "Identificador de las opciones"')
+                            ->set_width(50)
+                            ->set_conditional_logic(array(
+                                'relation' => 'AND',
+                                array(
+                                    'field' => 'parent.campos',
+                                    'value' => '3',
+                                    'compare' => '=',
+                                ),
+                            )),
+                        //CAMPO TEXTO - VALUE CODIGO DE FORMULARIO (Para tipo: select)
+                        Field::make('text', 'campo_cod_form', 'Código de formulario para el flujo')
+                            ->set_help_text('Ejm: Aquí solo viajará el ---> cCodFormExterno')
+                            ->set_width(50)
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'parent.campos',
+                                    'value' => ['3','6'],
+                                    'compare' => 'IN',
+                                ],
+                            ]),
+                        //CHECKBOX - PARA ACTIVAR MAS CAMPOS DENTRO DEL SELECT
+                        Field::make('checkbox', 'campo_check_activar_campos', __('¿Deseas abrir campos que dependan de esta selección?'))
+                            ->set_option_value('1') // Asegurar que guarde '1' en lugar de 'true'
+                            ->set_help_text('Marca esta opción para mostrar las carreras/programas.'),
+
+
+                        
+                        //SELECCIONABLE DE CAMPOS SI MARCA LA OPCION SI ARRIBA
+                        Field::make('select', 'mas_campos_subselect', __('Elige el tipo de campo que se abrirá al hacer clic en la opción del select'))
+                            ->set_width(100)
+                            ->set_options([
+                                '1' => 'Campo de Texto',
+                                '3' => 'Campo de Selección Simple',
+                                '4' => 'Campo de Selección multiple',
+                                '6' => 'Campo de Selección de Carreras',
+                            ])
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_check_activar_campos',
+                                    'value' => '1',
+                                    'compare' => '=',
+                                ],
+                            ]),
+                            //PARA TIPO TEXTO    
+                                //PLACEHOLDER DE CAMPO TEXTO - NOMBRE DEL CAMPO
+                                Field::make('text', 'campo_subselect_text_place', 'Título del campo')
+                                    ->set_help_text('Guía para el usuario de lo que debe hacer en el campo; Ejm: Apellidos o Escribe tu nombre')
+                                    ->set_width(50)
+                                    ->set_required(true)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['1'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                                Field::make('text', 'campo_subselect_text_name', 'Identificador del campo')
+                                    ->set_help_text('Ejm: cModalidad, cSubPrograma')
+                                    ->set_width(50) 
+                                    ->set_required(true)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['1'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                
+                            //PARA TIPO SELECCIÓN DE CARRERAS
+                                //ASOCIACION DE CARRERAS
+                                Field::make('association', 'campo_subselect_carreras', 'Carreras') 
+                                    ->set_help_text('Selecciona las carreras/programas que aparecerán en el select')
+                                    ->set_width(100)
+                                    ->set_types([
+                                        [
+                                            'type'      => 'post',
+                                            'post_type' => 'carreras',
+                                        ],
+                                    ])
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['6'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                            //PARA TIPO  SELECCION SIMPLE   - SUB NIVEL SELECCIÓN 1
+                                //CAMPO TEXTO - NOMBRE DE la PRIMERA OPCION DEL CAMPO SELECCION (primera opción) (Para tipo: select)
+                                Field::make('text', 'campo_subselect_select_place', 'Nombre del seleccionable')
+                                    ->set_help_text('Aparecerá como primera opción del select, pero será NO SELECCIONABLE, es un título')
+                                    ->set_width(27)
+                                    ->set_required(true)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['3'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                                Field::make('text', 'campo_subselect_select_name', 'Identificador del campo')
+                                    ->set_help_text('Ejm: cApellidos, cCelular, cCodFormExterno, cCarrera, cModalidad, cSubPrograma')
+                                    ->set_width(27) 
+                                    ->set_required(true)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['3'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                //CAMPO TEXTO - NAME DE LAS OPCIONES DE UN SELECT (Para tipo: select)
+                                Field::make('text', 'campo_subselect_select_nameseleccion', 'Identificador de las opciones')
+                                    ->set_help_text('Ejm: nModalidad,nSubPrograma')
+                                    ->set_width(50)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['3'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+
+                                //CAMPO SELECCIONABLE TAMAÑO - ELECCION DE TAMAÑO DE CAMPO (1,3)
+                                Field::make('select', 'campo_subselect_tamano', 'Tamaño')
+                                    ->set_width(50)
+                                    ->set_required(true)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['3'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ])
+                                    ->set_options(array(
+                                        '1t' => '50%',
+                                        '2t' => '100%',
+                                    )),
+                                //ULTIMO CAMPO COMPLEX ANIDADO
+                                Field::make('complex', 'campo_subselect_select', 'Campo de selección')
+                                    ->set_help_text('Seleccione las opciones')
+                                    ->set_width(100)
+                                    ->set_layout('tabbed-vertical')
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['3'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ])
+                                    ->add_fields(array(   
+                                        //CAMPO TEXTO - NOMBRE DE la PRIMERA OPCION DEL CAMPO SELECCION (primera opción) (Para tipo: select)
+                                        Field::make('text', 'campo_subsubselect_select_place', 'Nombre del seleccionable')
+                                            ->set_help_text('Ejm: Modalidad, Horarios')
+                                            ->set_width(27)
+                                            ->set_required(true),
+                                        //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                                        Field::make('text', 'campo_subsubselect_select_name', 'Texto o código a guardar')
+                                            ->set_help_text('Ejm: 0,1')
+                                            ->set_width(27) 
+                                            ->set_required(true),
+                                    )),
+                            //PARA TIPO  SELECCION MULTIPLE  - SUB NIVEL SELECCIÓN 1
+                                //CAMPO TEXTO - NOMBRE DE la PRIMERA OPCION DEL CAMPO SELECCION (primera opción) (Para tipo: select)
+                                Field::make('text', 'campo_submultiselect_select_place', 'Nombre del seleccionable')
+                                    ->set_help_text('Aparecerá como primera opción del select, pero será NO SELECCIONABLE, es un título')
+                                    ->set_width(27)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['4'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                                Field::make('text', 'campo_submultiselect_select_name', 'Identificador de las opciones')
+                                    ->set_help_text('Ejm: nModalidad, nSubPrograma, nPrograma')
+                                    ->set_width(27)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['4'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+                                //CAMPO TEXTO - NAME DE LAS OPCIONES DE UN SELECT (Para tipo: select)
+                                Field::make('text', 'campo_submultiselect_select_nameseleccion', 'Identificador del campo')
+                                    ->set_help_text('Ejm: cModalidad,cSubPrograma')
+                                    ->set_width(50)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['4'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ]),
+
+                                //CAMPO SELECCIONABLE TAMAÑO - ELECCION DE TAMAÑO DE CAMPO (1,3)
+                                Field::make('select', 'campo_submultiselect_tamano', 'Tamaño')
+                                    ->set_width(50)
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['4'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ])
+                                    ->set_options(array(
+                                        '1t' => '50%',
+                                        '2t' => '100%',
+                                    )),
+                                //SELECT MULTIPLE - SUBNIVEL 2
+                                Field::make('complex', 'campo_submultiselect_select', 'Campo de selección')
+                                    ->set_help_text('Seleccione las opciones')
+                                    ->set_width(100)
+                                    ->set_layout('tabbed-vertical')
+                                    ->set_conditional_logic([
+                                        'relation' => 'AND',
+                                        [
+                                            'field' => 'mas_campos_subselect',
+                                            'value' => ['4'],
+                                            'compare' => 'IN',
+                                        ],
+                                        [
+                                            'field' => 'campo_check_activar_campos',
+                                            'value' => '1',
+                                            'compare' => '=',
+                                        ],
+                                    ])
+                                    ->add_fields(array(   
+
+
+                                        //CAMPO TEXTO - NOMBRE DE la PRIMERA OPCION DEL CAMPO SELECCION (primera opción) (Para tipo: select)
+                                        Field::make('text', 'campo_subsubmultiselect_select_nombre', 'Nombre del seleccionable')
+                                            ->set_help_text('El valor que se agregue aquí, viajará con el nombre del "Identificador del campo"')
+                                            ->set_width(27),
+                                        //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
+                                        Field::make('text', 'campo_subsubmultiselect_select_name', 'Texto o código a guardar')
+                                            ->set_help_text('El valor que se agregue aquí, viajará con el nombre del "Identificador de las opciones"')
+                                            ->set_width(27),
+                                        //CAMPO TEXTO PLACEHOLDER DE PROGRAMA SELECCIONADO
+                                        Field::make('text', 'campo_subsubmultiselect_select_place', 'Primera opción del select')
+                                            ->set_help_text('Aparecerá como primera opción del select, pero será NO SELECCIONABLE, es un título')
+                                            ->set_width(100),
+                                        //CAMPO ASOCIACIÓN - CARRERAS
+                                        Field::make('association', 'campo_subsubmultiselect_carreras', __('Escoger carreras'))
+                                            ->set_types([
+                                                [
+                                                    'type'      => 'post',
+                                                    'post_type' => 'carreras', 
+                                                ],
+                                            ])
+                                            ->set_help_text('Selecciona carreras'),
+                                    )),        
+                            
+                                
+
+
+
+                    ))
+                    ->set_header_template('Opción <%- $_index + 1 %>'),
+                
+                //SELECCIONABLE DE CARRERAS
+                Field::make('association', 'campo_carreras', __('Escoger carreras'))
+                   ->set_types([
+                       [
+                           'type'      => 'post',
+                           'post_type' => 'carreras', 
+                       ],
+                   ])
+                   ->set_help_text('Selecciona hasta 3 carreras')
+                   ->set_conditional_logic([
+                       'relation' => 'AND',
+                       [
+                           'field'   => 'campos',
+                           'value'   => ['6'],
+                           'compare' => 'IN',
+                       ],
                     ]),
+
+                
                 
 
+                //RADIO    
                 Field::make('complex', 'opciones_campo', __('Opciones para selección unica'))
                     ->setup_labels(['plural_name' => 'Opciones', 'singular_name' => 'Opción'])
                     ->set_help_text('Ingresar la opción para mostrar')
@@ -164,13 +535,13 @@ Container::make('post_meta', 'formulario', 'Formulario')
                     ->set_header_template('Opción <%- $_index + 1 %>'),
 
             ))
-            ->set_header_template('Campo: <%- placehonder_campo%> | Tipo: <% switch(campos){
-            case "1" : %> Campo Texto
-            <% break; case "2" : %> Campo Número
-            <% break; case "3" : %> Campo Selección
-            <% break; case "4" : %> Campo Opciones
+            ->set_header_template('Campo: <%- campo_placeholder_label%> | Tipo: <% switch(campos){
+            case "1" : %> Campo de Texto
+            <% break; case "2" : %> Crear Campos Dependientes
+            <% break; case "3" : %> Campo de Selección
+            <% break; case "4" : %> Campo de Opciones
             <% break; case "5" : %> Campo Oculto
-            <% break; case "6" : %> Selector de proyectos
+            <% break; case "6" : %> Campo de Selección de Carreras
             <% } %>')
     ]);
 
