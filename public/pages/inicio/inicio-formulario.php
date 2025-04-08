@@ -1,5 +1,5 @@
 <?php
-$complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
+$campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
 ?>
 
 <form id="formularioAutonoma" name="email-form" data-name="Email Form" method="POST"
@@ -9,7 +9,7 @@ $complex_form_data = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
     <div class="form__input-wrapper">
 
     <?php
-        var_dump($complex_form_data);
+        var_dump($campos);
     ?>
     <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
 </div>
