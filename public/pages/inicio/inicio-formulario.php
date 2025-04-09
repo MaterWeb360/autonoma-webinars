@@ -14,7 +14,27 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
     <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
 </div>
 
+    <?php
+        foreach ($campos as $campo) {
 
+            switch ($campo['campos']) {
+                case '1': echo '<input name="" class="form__input-select-wrapper w-input">';
+                break;
+                case '3': echo 'Campo tipo select';
+                          echo '<br>';
+                break;
+                case '4': echo 'Campo radio button';
+                          echo '<br>';
+                break;
+                case '5': echo 'Campo oculto';
+                          echo '<br>';
+                break;
+                case '6': echo 'Campo seleccion de carreras';
+                          echo '<br>';
+                break;
+            } 
+        }
+    ?>
     <!--<div class="form_body">
         <div class="form_campos">
             <div id="boxCodCamp" class="form__input-select-wrapper hide">

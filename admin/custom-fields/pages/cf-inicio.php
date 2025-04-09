@@ -47,7 +47,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                 //CAMPO TEXTO - NOMBRE DEL CAMPO (placeholder o label) (Para tipo: text, select, radio, select carreras)
                 Field::make('text', 'campo_placeholder_label', 'Título del campo')
                     ->set_help_text('Guía para el usuario de lo que debe hacer en el campo; Ejm: Apellidos o Escribe tu nombre')
-                    ->set_width(100)
+                    ->set_width(50)
                     ->set_required(true)
                     ->set_conditional_logic([
                         'relation' => 'AND',
@@ -69,18 +69,30 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             'compare' => 'IN',
                         ],
                     ]),
-                //CAMPO TEXTO - NAME (Para tipo: text, select, radio, hidden, select carreras)
-                Field::make('text', 'campo_name', 'Identificador de las opciones')
+                //CAMPO TEXTO - NAME (Para tipo: select, options)
+                Field::make('text', 'campo_name_option', 'Identificador de las opciones')
                     ->set_help_text('Ejm: nModalidad, nSubPrograma, nPrograma')
                     ->set_width(27) 
                     ->set_conditional_logic([
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['1', '3', '4', '5','6'],
+                            'value' => ['4', '3'],
                             'compare' => 'IN',
                         ],
                     ]),
+                //CAMPO TEXTO - NAME (Para tipo: text, oculto)
+                Field::make('text', 'campo_name_text', 'Identificador del campo')
+                    ->set_help_text('Ejm: cModalidad, cSubPrograma, cPrograma')
+                    ->set_width(27) 
+                    ->set_conditional_logic([
+                        'relation' => 'AND',
+                        [
+                            'field' => 'campos',
+                            'value' => ['5', '1'],
+                            'compare' => 'IN',
+                        ],
+                    ]), 
                 //CAMPO TEXTO - VALUE (Para tipo:  radio, hidden)
                 Field::make('text', 'campo_value', 'Dato/código guardado o a guardar')
                     ->set_help_text('Ejm: 0, 10, 21, 17')
@@ -101,7 +113,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['3','6','4'],
+                            'value' => ['3','4'],
                             'compare' => 'IN',
                         ],
                     ]),
@@ -118,7 +130,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         ),
                     ))
                     ->set_options(array(
-                        '1t' => '50%',
+                        '1t' => '48%',
                         '2t' => '100%',
                     )),
                 
@@ -334,7 +346,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                         ],
                                     ])
                                     ->set_options(array(
-                                        '1t' => '50%',
+                                        '1t' => '48%',
                                         '2t' => '100%',
                                     )),
                                 //ULTIMO CAMPO COMPLEX ANIDADO
@@ -437,7 +449,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                         ],
                                     ])
                                     ->set_options(array(
-                                        '1t' => '50%',
+                                        '1t' => '48%',
                                         '2t' => '100%',
                                     )),
                                 //SELECT MULTIPLE - SUBNIVEL 2
@@ -897,7 +909,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '50%',
+                                                    '1t' => '48%',
                                                     '2t' => '100%',
                                                 )),
                                             //ULTIMO CAMPO COMPLEX ANIDADO
@@ -1000,7 +1012,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '50%',
+                                                    '1t' => '48%',
                                                     '2t' => '100%',
                                                 )),
                                             //SELECT MULTIPLE - SUBNIVEL 2
@@ -1238,7 +1250,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '50%',
+                                                    '1t' => '48%',
                                                     '2t' => '100%',
                                                 )),
                                             //ULTIMO CAMPO COMPLEX ANIDADO
@@ -1341,7 +1353,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '50%',
+                                                    '1t' => '48%',
                                                     '2t' => '100%',
                                                 )),
                                             //SELECT MULTIPLE - SUBNIVEL 2
