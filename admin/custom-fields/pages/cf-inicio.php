@@ -44,7 +44,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         '6' => 'Campo de Selección de Carreras',
                     ]),
                 
-                //CAMPO TEXTO - NOMBRE DEL CAMPO (placeholder o label) (Para tipo: text, select, radio, select carreras)
+                //CAMPO TEXTO - NOMBRE DEL CAMPO (placeholder o label) (Para tipo: text,  radio)
                 Field::make('text', 'campo_placeholder_label', 'Título del campo')
                     ->set_help_text('Guía para el usuario de lo que debe hacer en el campo; Ejm: Apellidos o Escribe tu nombre')
                     ->set_width(50)
@@ -130,10 +130,26 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         ),
                     ))
                     ->set_options(array(
-                        '1t' => '48%',
-                        '2t' => '100%',
+                        '48%' => '50%',
+                        '100%' => '100%',
                     )),
-                
+                //TIPO DE CAMPO TEXTO
+                Field::make('select', 'campo_tipo', __('Tipo de campo'))
+                    ->set_help_text('Dato importante para la validación del campo')
+                    ->set_width(15)
+                    ->set_options([
+                        'email' => 'E-mail',
+                        'number' => 'Celular',
+                        'text' => 'Texto',
+                    ])
+                    ->set_conditional_logic([
+                        'relation' => 'AND',
+                        [
+                            'field' => 'campos',
+                            'value' => '1',
+                            'compare' => '=',
+                        ],
+                    ]),
                 //CAMPO SELECT
                 Field::make('complex', 'campo_select', __('Campo de selección'))
                     ->setup_labels(['plural_name' => 'Selecciones', 'singular_name' => 'Selección'])
@@ -346,8 +362,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                         ],
                                     ])
                                     ->set_options(array(
-                                        '1t' => '48%',
-                                        '2t' => '100%',
+                                        '48%' => '50%',
+                                        '100%' => '100%',
                                     )),
                                 //ULTIMO CAMPO COMPLEX ANIDADO
                                 Field::make('complex', 'campo_subselect_select', 'Campo de selección')
@@ -449,8 +465,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                         ],
                                     ])
                                     ->set_options(array(
-                                        '1t' => '48%',
-                                        '2t' => '100%',
+                                        '48%' => '50%',
+                                        '100%' => '100%',
                                     )),
                                 //SELECT MULTIPLE - SUBNIVEL 2
                                 Field::make('complex', 'campo_submultiselect_select', 'Campo de selección')
@@ -643,8 +659,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                     ],
                                 ))
                                 ->set_options(array(
-                                    '1t' => '48%',
-                                    '2t' => '100%',
+                                    '48%' => '50%',
+                                    '100%' => '100%',
                                 )),
                             //nombre del Value en seleccionable
                             Field::make('text', 'r_one_select_name_option', 'Identificador de las opciones')
@@ -909,8 +925,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '48%',
-                                                    '2t' => '100%',
+                                                    '48%' => '50%',
+                                                    '100%' => '100%',
                                                 )),
                                             //ULTIMO CAMPO COMPLEX ANIDADO
                                             Field::make('complex', 'r_two_subselect_select', 'Campo de selección')
@@ -1012,8 +1028,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '48%',
-                                                    '2t' => '100%',
+                                                    '48%' => '50%',
+                                                    '100%' => '100%',
                                                 )),
                                             //SELECT MULTIPLE - SUBNIVEL 2
                                             Field::make('complex', 'r_two_submultiselect_select', 'Campo de selección')
@@ -1250,8 +1266,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '48%',
-                                                    '2t' => '100%',
+                                                    '48%' => '50%',
+                                                    '100%' => '100%',
                                                 )),
                                             //ULTIMO CAMPO COMPLEX ANIDADO
                                             Field::make('complex', 'rcampo_subselect_select', 'Campo de selección')
@@ -1353,8 +1369,8 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                                     ],
                                                 ])
                                                 ->set_options(array(
-                                                    '1t' => '48%',
-                                                    '2t' => '100%',
+                                                    '48%' => '50%',
+                                                    '100%' => '100%',
                                                 )),
                                             //SELECT MULTIPLE - SUBNIVEL 2
                                             Field::make('complex', 'rcampo_submultiselect_select', 'Campo de selección')

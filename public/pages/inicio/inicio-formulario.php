@@ -9,32 +9,64 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
     <div class="form__input-wrapper">
 
     <?php
-        var_dump($campos);
-    ?>
-    <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
-</div>
 
-    <?php
+        var_dump ($campos);
         foreach ($campos as $campo) {
-
             switch ($campo['campos']) {
-                case '1': echo '<input name="" class="form__input-select-wrapper w-input">';
+                case '1': //campo texto
+                    $plaholder = $campo['campo_placeholder_label'];
+                    $tipo = $campo['campo_tipo'];
+                    $name = $campo['campo_name_text'];
+                    $size = $campo['campo_tamano'];
+                    echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" style="width: '.$size.'">';
                 break;
-                case '3': echo 'Campo tipo select';
-                          echo '<br>';
+                case '3': // campo select
+                    $no_option = $campo['campo_placeholder_select'];
+                    $size = $campo['campo_tamano'];
+                    $options = $campo['campo_options'];
+                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
+                    echo '    <select name="nCarrera" data-name="nCarrera" class="form__input-select w-select">';
+                    echo '        <option value="" disabled selected>'.$no_option.'</option>';
+                    foreach ($options as $option) {
+                        echo '<option value="'.$option.'">'.$option.'</option>';
+                    }
+                    echo '    </select>';
+                    echo '</div>';
+
+
+                    break;
+                case '4': //campo radio
+                    echo 'Campo radio button';
+                    echo '<br>';
                 break;
-                case '4': echo 'Campo radio button';
-                          echo '<br>';
+                case '5': //campo oculto
+                    $value = $campo['campo_value'];
+                    $name = $campo['campo_name_text'];
+                    echo '<input name="'.$name.'" type="hidden" value="'.$value.'">';
                 break;
-                case '5': echo 'Campo oculto';
-                          echo '<br>';
-                break;
-                case '6': echo 'Campo seleccion de carreras';
-                          echo '<br>';
+                case '6': //campo carreras
+                    $no_option = $campo['campo_placeholder_select'];
+                    $size = $campo['campo_tamano'];
+                    $carreras = $campo['campo_carreras'];
+                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
+                    echo '    <select name="nCarrera" data-name="nCarrera" class="form__input-select w-select">';
+                    echo '        <option value="" disabled selected>'.$no_option.'</option>';
+                    foreach ($carreras as $carrera) {
+                        $post_id = $carrera['id'];
+                        $titulo = get_the_title($post_id);
+                        $slug = get_post_field('post_name', $post_id);
+                        echo '<option value="'.$slug.'">'.$titulo.'</option>';
+                    }
+                    echo '    </select>';
+                    echo '</div>';
+                    break;
                 break;
             } 
         }
-    ?>
+    ?>    
+
+    <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
+</div>
     <!--<div class="form_body">
         <div class="form_campos">
             <div id="boxCodCamp" class="form__input-select-wrapper hide">
