@@ -21,24 +21,54 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                     echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" style="width: '.$size.'">';
                 break;
                 case '3': // campo select
-                    $no_option = $campo['campo_placeholder_select'];
-                    $size = $campo['campo_tamano'];
-                    $options = $campo['campo_options'];
-                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
-                    echo '    <select name="nCarrera" data-name="nCarrera" class="form__input-select w-select">';
-                    echo '        <option value="" disabled selected>'.$no_option.'</option>';
-                    foreach ($options as $option) {
-                        echo '<option value="'.$option.'">'.$option.'</option>';
+                    echo 'Campo select simple';
+                    echo '<br>';
+                    break;
+
+
+
+
+
+
+
+
+
+
+
+                case '4': //campo radio
+                    $plaholder = $campo['campo_placeholder_label'];
+                    $radios = $campo['campo_radio'];
+                    $name = $campo['campo_name_option'];
+                    $value_selected = $campo['campo_value_seleccionado'];
+                    
+
+                    echo '<div class="form__input-radio-group">';
+                    echo '    <div class="form__input-radio-label">'.$plaholder.'</div>';
+                    echo '<div class="form__input-radio-wrapper">';
+                    foreach ($radios as $radio) {
+                        $value = $radio['radio_grupo_value'];
+                        $label = $radio['radio_grupo_label'];
+                        echo '    <label class="form__input-radio-button">';
+                        echo '     <input type="radio" name="'.$name.'" value="'.$value.'">';
+                        echo '     <p id="'.$value_selected.'">'.$label.'</p>'; //Guardar el texto mediante el ID y enviarlo en el JSON (name igual a este id)
+                        echo '    </label>';
+
                     }
-                    echo '    </select>';
+                    echo '</div>';
                     echo '</div>';
 
+                    //iniciar con los select o subcampos con DATA-*
+    
 
-                    break;
-                case '4': //campo radio
-                    echo 'Campo radio button';
-                    echo '<br>';
                 break;
+
+
+
+
+
+
+
+
                 case '5': //campo oculto
                     $value = $campo['campo_value'];
                     $name = $campo['campo_name_text'];

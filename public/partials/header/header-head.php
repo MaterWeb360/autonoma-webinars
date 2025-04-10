@@ -45,6 +45,9 @@
   echo $script_header;
   ?>
 <style>
+    .form__input-radio-label{
+      margin-bottom:0.5rem;
+    }
     .form__input-wrapper{
       display:flex;
       justify-content: space-between;
@@ -53,6 +56,22 @@
     }
     .selectWP{
       margin-bottom:0;background: transparent;border: none;
+    }
+    .form__input-radio-wrapper{
+      display:flex;
+      justify-content: space-between;
+      flex-wrap:wrap;
+      gap:0.5rem;
+    }
+    .form__input-radio-button{
+      display:flex;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    .form__input-radio-button::hover {
+      cursor: pointer;
     }
   </style>
  
