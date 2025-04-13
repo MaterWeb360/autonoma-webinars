@@ -10,7 +10,7 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
 
     <?php
 
-        var_dump ($campos);
+        //var_dump($campos);
         foreach ($campos as $campo) {
             switch ($campo['campos']) {
                 case '1': //campo texto
@@ -41,25 +41,160 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                     $name = $campo['campo_name_option'];
                     $value_selected = $campo['campo_value_seleccionado'];
                     
+                        //Nivel 1 - RADIOS
+                        echo '<div class="form__input-radio-group" data-nivel="1">';
+                            echo '   <div class="form__input-radio-label">'.$plaholder.'</div>';
+                            echo '   <div class="form__input-radio-wrapper">';
+                                foreach ($radios as $radio) {
+                                    $value = $radio['radio_grupo_value'];
+                                    $label = $radio['radio_grupo_label'];
+                                    echo '<label class="form__input-radio-button">';
+                                    echo '  <input type="radio" name="'.$name.'" value="'.$value.'" data-id="'.$value.'">';
+                                    echo '  <p id="'.$value_selected.'">'.$label.'</p>';
+                                    echo '</label>';
+                                }
+                            echo '   </div>';
+                        echo '</div>';
 
-                    echo '<div class="form__input-radio-group">';
-                    echo '    <div class="form__input-radio-label">'.$plaholder.'</div>';
-                    echo '<div class="form__input-radio-wrapper">';
-                    foreach ($radios as $radio) {
-                        $value = $radio['radio_grupo_value'];
-                        $label = $radio['radio_grupo_label'];
-                        echo '    <label class="form__input-radio-button">';
-                        echo '     <input type="radio" name="'.$name.'" value="'.$value.'">';
-                        echo '     <p id="'.$value_selected.'">'.$label.'</p>'; //Guardar el texto mediante el ID y enviarlo en el JSON (name igual a este id)
-                        echo '    </label>';
+                        //Nivel 2 - SELECCIONABLE 1
+                        echo   '<div class="form__selects-wrapper" data-nivel="2">';
+                            foreach ($radios as $radio) {
+                                //var_dump($radio);
+                                $check1 = $radio['radio_check_activar_campos'];
+                                $parent = $radio['radio_grupo_value'];
+                                if ($check1) {
+                                    $r_tipo_campo = $radio['radio_campos'];
+                                    $r_name_campo = $radio['radio_subopcion_nombre'];
+                                    $r_name_option = $radio['radio_subopcion_valor'];
 
-                    }
-                    echo '</div>';
-                    echo '</div>';
+                                    switch ($r_tipo_campo) {
+                                        case '2': //campo selección
+                                        $s_place_one = $radio['r_one_select_place'];   //iera opcion del select
+                                        $selects_one = $radio['r_one_select'];   //iera opcion del selectt
+                                        //var_dump($selects_one);
+                                        echo '<div class="form__box" data-parent="'.$parent.'">';
+                                            echo '<div class="form__input-select-wrapper" style="width: 100%;" >';
+                                                echo '<select name="" data-name="'.$r_name_option.'" class="form__input-select w-select">';  
+                                                echo '<option value="" >'.$s_place_one.'</option>';  
+                                                    foreach ($selects_one as $select_one) {
+                                                        $one_option = $select_one['rcampo_select_placeholder'];
+                                                        $one_option_val = $select_one['rcampo_select_value'];
+                                                        echo '<option value="'.$one_option_val .'">'.$one_option.'</option>';
+                                                    }
+                                                echo '</select>';
+                                            echo '</div>';
+                                            echo '<input type="hidden" value="" name="" data-name="'.$r_name_campo .'">'; //input que llevara el nombre del option seleccionado
+                                        echo '</div>';
+                                        break;
+                                        case '3': //campo oculto
+                                            echo '<div class="form__box" data-parent="'.$parent.'">';
+                                                echo '<input type="hidden" value="0" data-name="'.$r_name_campo .'" >';
+                                                echo '<input type="hidden" value="0" data-name="'.$r_name_option .'">';
+                                            echo '</div>';
+                                        break;
+                                    }
+                                
 
-                    //iniciar con los select o subcampos con DATA-*
-    
+                                }
+                            }
+                        echo   '</div>';
 
+                        //Nivel 3 - SELECCIONABLE 2
+                        echo   '<div class="form__selects-wrapper" data-nivel="3">';
+                            foreach ($radios as $radio) {
+                                $s_tipo_two = $radio['r_two_select']; //campo oculto
+                                $s_tipo_one = $radio['r_one_select']; //campo select
+                                $parent = $radio['radio_grupo_value'];
+                                //var_dump($radio);
+                                //pregrado - oculto
+                                if($s_tipo_two){ 
+                                    $s_name_option = $radio['r_one_select_name_option'];  //name de opciones
+                                    $s_name_campo = $radio['r_one_select_name']; //name de campo (en un input oculto)
+                                    $s_place = $radio['r_one_select_place']; //placeholder primera opcion                                    
+                                    $s_select_two = $radio['r_two_select']; //Opciones para hacerle bucle
+                                    $parent_dos = $radio['r_one_value']; //Opciones para parent
+                                    
+                                    echo '<div class="form__box" data-parent="'.$parent.'"   data-parent2="'.$parent_dos.'">';
+                                        echo '<div class="form__input-select-wrapper" style="width: 100%;">';
+                                            echo '<select name="" data-name="'.$s_name_option.'" class="form__input-select w-select">';
+                                                echo '<option value="" >'.$s_place.'</option>';
+                                                foreach ($s_select_two as $select_two) {
+                                                    $two_option = $select_two['r_two_select_placeholder']; //nombre option
+                                                    $two_option_val = $select_two['r_two_select_value']; //value option
+                                                    echo '<option value="'.$two_option_val .'">'.$two_option.'</option>';
+                                                }
+                                            echo '</select>';
+                                        echo '</div>';
+                                        echo '<input type="hidden" name ="" value="" data-name="'.$s_name_campo.'">'; //value para enviar el nombre
+                                    echo '</div>';
+                                }
+                                //posgrado - select - tienen campos distintos en, hay un nivel mas
+                                if($s_tipo_one){
+                                    $s_select_one = $radio['r_one_select']; //opciones para hacer bucle
+                                    foreach ($s_select_one as $select_one) {
+                                        //var_dump($select_one);
+                                        $parent_dos = $select_one['rcampo_select_value'];
+                                        $s_name_campo = $select_one['rcampo_submultiselect_select_nameseleccion']; //name del campo (input oculto enviar nombre)
+                                        $s_name_option = $select_one['rcampo_submultiselect_select_name']; //name de las opciones
+                                        $s_place = $select_one['rcampo_submultiselect_select_place']; //placeholder
+                                        $s_select_one = $select_one['rcampo_submultiselect_select']; //bucle de opciones
+                                        echo '<div class="form__box" data-parent="'.$parent.'" data-parent2="'.$parent_dos.'">';
+                                            echo '<div class="form__input-select-wrapper" style="width: 100%;">';
+                                                echo '<select name="" data-name="'.$s_name_option.'" class="form__input-select w-select">';
+                                                echo '<option value="">'.$s_place.'</option>';
+                                                foreach ($s_select_one as $select_one) {
+                                                    $one_option = $select_one['rcampo_subsubmultiselect_select_nombre'];//nombre
+                                                    $one_option_value = $select_one['rcampo_subsubmultiselect_select_name'];//value
+                                                    echo '<option value="'.$one_option_value.'">'.$one_option.'</option>';
+                                                }
+                                                echo '</select>';
+                                            echo '</div>';
+                                            echo '<input type="hidden" data-name="'.$s_name_campo.'">'; //value para enviar el nombre 
+                                        echo '</div>';
+                                    }
+                                }
+                            }
+                        echo   '</div>';
+
+                        //NIVEL 4 - SELECCIONABLE 3 (2 opciones)
+                        echo   '<div class="form__selects-wrapper" data-nivel="4">';
+                            
+                        //posgrado -> r_one_select
+                        //pregrado -> r_two_select
+                        //var_dump($radios);
+                        foreach ($radios as $radio) {
+                            $rama_posgrado = $radio['r_one_select'];
+                            $rama_pregrado = $radio['r_two_select'];
+                            if($rama_posgrado){
+                                foreach ($rama_posgrado as $modalidades) { //for each a las submodalidades
+                                    $modalidad = $modalidades['rcampo_submultiselect_select']; //Tenemos la modalidad
+                                    $tipo_campo = $modalidades['rmas_campos_subselect']; //tipo de campo
+                                    switch($tipo_campo){ //en posgrado hay que hacer un switch, por que el tipo de campo tiene 2 opciones
+                                        case '4': //Campo de Selección multiple (USANDO ACTUALMENTE)
+                                            break;
+
+                                        case '6': //Campo de Selección de Carreras (RELLENAR CONTENIDO Y PROBAR)
+                                            break;
+                                    }
+                                }
+                            }else if($rama_pregrado){
+                                foreach ($rama_pregrado as $modalidades) { //for each a las submodalidades
+                                    $modalidad = $modalidades['r_two_subselect_carreras']; //Tenemos la modalidad
+                                    $tipo_campo = $modalidades['r_two_campos_subselect']; //tipo de campo
+                                    switch($tipo_campo){ //en pregrado hay que hacer un switch, por que el tipo de campo tiene 2 opciones
+                                        case '4': //Campo de Selección multiple (RELLENAR CONTENIDO Y PROBAR)
+                                            break;
+
+                                        case '6': //Campo de Selección de Carreras (USANDO ACTUALMENTE)
+                                            break;
+                                    }
+                                }   
+                            }
+                        }
+
+                            
+
+                        echo   '</div>';
                 break;
 
 

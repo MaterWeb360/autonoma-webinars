@@ -774,10 +774,10 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                         ->set_option_value('1') // Asegurar que guarde '1' en lugar de 'true'
                                         ->set_help_text('Marca esta opción para mostrar las carreras/programas.'),     
                                     //SELECCIONABLE DE CAMPOS SI MARCA LA OPCION SI ARRIBA
-                                    Field::make('select', 'r_two_campos_subselect', __('Elige el tipo de campo que se abrirá al hacer clic en la opción del select'))
+                                    Field::make('select', 'r_two_campos_subselect', __('aaElige el tipo de campo que se abrirá al hacer clic en la opción del select'))
                                         ->set_width(100)
                                         ->set_options([
-                                            '1' => 'Campo de Texto',
+                                            //'1' => 'Campo de Texto',
                                             //'3' => 'Campo de Selección Simple',
                                             '4' => 'Campo de Selección multiple',
                                             '6' => 'Campo de Selección de Carreras',
@@ -1118,7 +1118,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                     Field::make('select', 'rmas_campos_subselect', __('Elige el tipo de campo que se abrirá al hacer clic en la opción del select'))
                                         ->set_width(100)
                                         ->set_options([
-                                            '1' => 'Campo de Texto',
+                                            //'1' => 'Campo de Texto',
                                             //'3' => 'Campo de Selección Simple',
                                             '4' => 'Campo de Selección multiple',
                                             '6' => 'Campo de Selección de Carreras',
