@@ -69,8 +69,8 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
 
                                     switch ($r_tipo_campo) {
                                         case '2': //campo selección
-                                        $s_place_one = $radio['r_one_select_place'];   //iera opcion del select
-                                        $selects_one = $radio['r_one_select'];   //iera opcion del selectt
+                                        $s_place_one = $radio['radio_select_placeholder'];   //primera opcion del select
+                                        $selects_one = $radio['r_one_select'];   //selectt
                                         //var_dump($selects_one);
                                         echo '<div class="form__box" data-parent="'.$parent.'">';
                                             echo '<div class="form__input-select-wrapper" style="width: 100%;" >';
@@ -165,15 +165,55 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                         foreach ($radios as $radio) {
                             $rama_posgrado = $radio['r_one_select'];
                             $rama_pregrado = $radio['r_two_select'];
+                            $parent = $radio['radio_grupo_value'];
                             if($rama_posgrado){
                                 foreach ($rama_posgrado as $modalidades) { //for each a las submodalidades
                                     $modalidad = $modalidades['rcampo_submultiselect_select']; //Tenemos la modalidad
                                     $tipo_campo = $modalidades['rmas_campos_subselect']; //tipo de campo
+                                    //var_dump($modalidades);
                                     switch($tipo_campo){ //en posgrado hay que hacer un switch, por que el tipo de campo tiene 2 opciones
                                         case '4': //Campo de Selección multiple (USANDO ACTUALMENTE)
+                                            foreach ($modalidad as $carreras) {
+                                                $parent_tres = $carreras['rcampo_subsubmultiselect_select_name']; //parent 
+                                                $carrera = $carreras['rcampo_subsubmultiselect_carreras']; //bucle de carreras 
+                                                $s_place = $carreras['rcampo_subsubmultiselect_select_place']; //placeholder primera opcion
+                                                //var_dump($carreras);
+                                                echo '<div class="form__box" data-parent="'.$parent.'" data-parent3="'.$parent_tres.'">';
+                                                    echo '<div class="form__input-select-wrapper" style="width: 100%;">';
+                                                        echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
+                                                        echo '<option>'.$s_place.'</option>';
+                                                            foreach ($carrera as $carre) {
+                                                                $post_id = $carre['id'];
+                                                                $titulo = get_the_title($post_id);
+                                                                $slug = get_post_field('post_name', $post_id);
+                                                                echo '<option value="'.$slug.'">'.$titulo.'</option>';       
+                                                            }
+                                                        echo '</select>';
+                                                    echo '</div>';
+                                                echo '</div>';
+                                            }
+
                                             break;
 
                                         case '6': //Campo de Selección de Carreras (RELLENAR CONTENIDO Y PROBAR)
+                                            foreach ($modalidad as $carreras) {
+                                                $parent_tres = $carreras['rcampo_select_value'];//parent
+                                                $carrera = $carreras['rcampo_subselect_carreras'];//bucle de carreras
+                                                $s_place = $carreras['rcampo_subselect_select_place'];//placeholder   
+                                                echo '<div class="form__box" data-parent="'.$parent.'" data-parent3="'.$parent_tres.'">';
+                                                    echo '<div class="form__input-select-wrapper" style="width: 100%;">';
+                                                        echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
+                                                        echo '<option>'.$s_place.'</option>';
+                                                            foreach ($carrera as $carre) {
+                                                                $post_id = $carre['id'];
+                                                                $titulo = get_the_title($post_id);
+                                                                $slug = get_post_field('post_name', $post_id);
+                                                                echo '<option value="'.$slug.'">'.$titulo.'</option>';       
+                                                            }
+                                                        echo '</select>';
+                                                    echo '</div>';
+                                                echo '</div>';
+                                            }
                                             break;
                                     }
                                 }
@@ -186,6 +226,8 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                                             break;
 
                                         case '6': //Campo de Selección de Carreras (USANDO ACTUALMENTE)
+                                            echo 'Select actual de pregrado';
+                                            echo '<br>';
                                             break;
                                     }
                                 }   
