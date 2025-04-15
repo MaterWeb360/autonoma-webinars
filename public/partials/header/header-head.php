@@ -50,7 +50,7 @@
     }
     .form__input-wrapper{
       display:flex;
-      flex-direction:column;
+      /*flex-direction:column;*/
       justify-content: space-between;
       flex-wrap:wrap;
       gap:0.5rem;

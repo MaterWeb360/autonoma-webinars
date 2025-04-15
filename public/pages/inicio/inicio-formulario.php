@@ -1,10 +1,12 @@
 <?php
+$api_envio = carbon_get_post_meta(get_the_ID(), 'url_api');
 $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
+$boton = carbon_get_post_meta(get_the_ID(), 'boton');
 ?>
 
 <form id="formularioAutonoma" name="email-form" data-name="Email Form" method="POST"
     class="form_content formWP" data-wf-page-id="67a1021497306af2adfd2a68"
-    data-wf-element-id="a1254f40-a5d5-2265-c737-38cb40f3ca3c">
+    data-wf-element-id="a1254f40-a5d5-2265-c737-38cb40f3ca3c" action="<?= $api_envio ?>">
 
     <div class="form__input-wrapper">
 
@@ -12,36 +14,42 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
 
         //var_dump($campos);
         foreach ($campos as $campo) {
+            
             switch ($campo['campos']) {
                 case '1': //campo texto
-                    $plaholder = $campo['campo_placeholder_label'];
+                    $plaholder = $campo['campo_placeholder'];
                     $tipo = $campo['campo_tipo'];
-                    $name = $campo['campo_name_text'];
+                    $name = $campo['campo_name'];
                     $size = $campo['campo_tamano'];
                     echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" style="width: '.$size.'">';
                 break;
                 case '3': // campo select
-                    echo 'Campo select simple';
-                    echo '<br>';
+                    //var_dump($campo);
+                    $size = $campo['campo_tamano'];
+                    $s_place = $campo['campo_placeholder'];
+                    $s_name = $campo['campo_name'];
+                    $bucleOps = $campo['campo_select'];
+                    $name_option = $campo['campo_name_option'];
+                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
+                        echo '<select name="" data-name="'.$s_name.'" class="form__input-select w-select">';
+                        echo '<option>'.$s_place.'</option>';
+                        foreach ($bucleOps as $option) {
+                            $value = $option['campo_select_value'];
+                            $label = $option['campo_select_placeholder'];
+                            echo '<option value="'.$value.'">'.$label.'</option>';
+                        }
+                        echo '</select>';
+                        if($name_option){
+                        echo '<input type="hidden" data-name="'.$name_option.'" value="">';
+                        }
+                    echo '</div>';
                     break;
-
-
-
-
-
-
-
-
-
-
-
                 case '4': //campo radio
-                    $plaholder = $campo['campo_placeholder_label'];
+                    //var_dump($campo);
+                    $plaholder = $campo['campo_placeholder'];
                     $radios = $campo['campo_radio'];
-                    $name = $campo['campo_name_option'];
-                    $value_selected = $campo['campo_value_seleccionado'];
-                    
-                        //Nivel 1 - RADIOS
+                    $name = $campo['campo_name'];
+                    $name_option = $campo['campo_name_option'];
                         echo '<div class="form__input-radio-group" data-nivel="1">';
                             echo '   <div class="form__input-radio-label">'.$plaholder.'</div>';
                             echo '   <div class="form__input-radio-wrapper">';
@@ -50,213 +58,24 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                                     $label = $radio['radio_grupo_label'];
                                     echo '<label class="form__input-radio-button">';
                                     echo '  <input type="radio" name="'.$name.'" value="'.$value.'" data-id="'.$value.'">';
-                                    echo '  <p id="'.$value_selected.'">'.$label.'</p>';
+                                    echo '  <p>'.$label.'</p>';
+                                    echo '<input type="hidden" data-name="'.$name_option .'" value="'.$label.'">';
                                     echo '</label>';
                                 }
                             echo '   </div>';
                         echo '</div>';
-
-                        //Nivel 2 - SELECCIONABLE 1
-                        echo   '<div class="form__selects-wrapper" data-nivel="2">';
-                            foreach ($radios as $radio) {
-                                //var_dump($radio);
-                                $check1 = $radio['radio_check_activar_campos'];
-                                $parent = $radio['radio_grupo_value'];
-                                if ($check1) {
-                                    $r_tipo_campo = $radio['radio_campos'];
-                                    $r_name_campo = $radio['radio_subopcion_nombre'];
-                                    $r_name_option = $radio['radio_subopcion_valor'];
-
-                                    switch ($r_tipo_campo) {
-                                        case '2': //campo selección
-                                        $s_place_one = $radio['radio_select_placeholder'];   //primera opcion del select
-                                        $selects_one = $radio['r_one_select'];   //selectt
-                                        //var_dump($selects_one);
-                                        echo '<div class="form__box" data-parent="'.$parent.'">';
-                                            echo '<div class="form__input-select-wrapper" style="width: 100%;" >';
-                                                echo '<select name="" data-name="'.$r_name_option.'" class="form__input-select w-select">';  
-                                                echo '<option value="" >'.$s_place_one.'</option>';  
-                                                    foreach ($selects_one as $select_one) {
-                                                        $one_option = $select_one['rcampo_select_placeholder'];
-                                                        $one_option_val = $select_one['rcampo_select_value'];
-                                                        echo '<option value="'.$one_option_val .'">'.$one_option.'</option>';
-                                                    }
-                                                echo '</select>';
-                                            echo '</div>';
-                                            echo '<input type="hidden" value="" name="" data-name="'.$r_name_campo .'">'; //input que llevara el nombre del option seleccionado
-                                        echo '</div>';
-                                        break;
-                                        case '3': //campo oculto
-                                            echo '<div class="form__box" data-parent="'.$parent.'">';
-                                                echo '<input type="hidden" value="0" data-name="'.$r_name_campo .'" >';
-                                                echo '<input type="hidden" value="0" data-name="'.$r_name_option .'">';
-                                            echo '</div>';
-                                        break;
-                                    }
-                                
-
-                                }
-                            }
-                        echo   '</div>';
-
-                        //Nivel 3 - SELECCIONABLE 2
-                        echo   '<div class="form__selects-wrapper" data-nivel="3">';
-                            foreach ($radios as $radio) {
-                                $s_tipo_two = $radio['r_two_select']; //campo oculto
-                                $s_tipo_one = $radio['r_one_select']; //campo select
-                                $parent = $radio['radio_grupo_value'];
-                                //var_dump($radio);
-                                //pregrado - oculto
-                                if($s_tipo_two){ 
-                                    $s_name_option = $radio['r_one_select_name_option'];  //name de opciones
-                                    $s_name_campo = $radio['r_one_select_name']; //name de campo (en un input oculto)
-                                    $s_place = $radio['r_one_select_place']; //placeholder primera opcion                                    
-                                    $s_select_two = $radio['r_two_select']; //Opciones para hacerle bucle
-                                    $parent_dos = $radio['r_one_value']; //Opciones para parent
-                                    
-                                    echo '<div class="form__box" data-parent="'.$parent.'"   data-parent2="'.$parent_dos.'">';
-                                        echo '<div class="form__input-select-wrapper" style="width: 100%;">';
-                                            echo '<select name="" data-name="'.$s_name_option.'" class="form__input-select w-select">';
-                                                echo '<option value="" >'.$s_place.'</option>';
-                                                foreach ($s_select_two as $select_two) {
-                                                    $two_option = $select_two['r_two_select_placeholder']; //nombre option
-                                                    $two_option_val = $select_two['r_two_select_value']; //value option
-                                                    echo '<option value="'.$two_option_val .'">'.$two_option.'</option>';
-                                                }
-                                            echo '</select>';
-                                        echo '</div>';
-                                        echo '<input type="hidden" name ="" value="" data-name="'.$s_name_campo.'">'; //value para enviar el nombre
-                                    echo '</div>';
-                                }
-                                //posgrado - select - tienen campos distintos en, hay un nivel mas
-                                if($s_tipo_one){
-                                    $s_select_one = $radio['r_one_select']; //opciones para hacer bucle
-                                    foreach ($s_select_one as $select_one) {
-                                        //var_dump($select_one);
-                                        $parent_dos = $select_one['rcampo_select_value'];
-                                        $s_name_campo = $select_one['rcampo_submultiselect_select_nameseleccion']; //name del campo (input oculto enviar nombre)
-                                        $s_name_option = $select_one['rcampo_submultiselect_select_name']; //name de las opciones
-                                        $s_place = $select_one['rcampo_submultiselect_select_place']; //placeholder
-                                        $s_select_one = $select_one['rcampo_submultiselect_select']; //bucle de opciones
-                                        echo '<div class="form__box" data-parent="'.$parent.'" data-parent2="'.$parent_dos.'">';
-                                            echo '<div class="form__input-select-wrapper" style="width: 100%;">';
-                                                echo '<select name="" data-name="'.$s_name_option.'" class="form__input-select w-select">';
-                                                echo '<option value="">'.$s_place.'</option>';
-                                                foreach ($s_select_one as $select_one) {
-                                                    $one_option = $select_one['rcampo_subsubmultiselect_select_nombre'];//nombre
-                                                    $one_option_value = $select_one['rcampo_subsubmultiselect_select_name'];//value
-                                                    echo '<option value="'.$one_option_value.'">'.$one_option.'</option>';
-                                                }
-                                                echo '</select>';
-                                            echo '</div>';
-                                            echo '<input type="hidden" data-name="'.$s_name_campo.'">'; //value para enviar el nombre 
-                                        echo '</div>';
-                                    }
-                                }
-                            }
-                        echo   '</div>';
-
-                        //NIVEL 4 - SELECCIONABLE 3 (2 opciones)
-                        echo   '<div class="form__selects-wrapper" data-nivel="4">';
-                            
-                        //posgrado -> r_one_select
-                        //pregrado -> r_two_select
-                        //var_dump($radios);
-                        foreach ($radios as $radio) {
-                            $rama_posgrado = $radio['r_one_select'];
-                            $rama_pregrado = $radio['r_two_select'];
-                            $parent = $radio['radio_grupo_value'];
-                            if($rama_posgrado){
-                                foreach ($rama_posgrado as $modalidades) { //for each a las submodalidades
-                                    $modalidad = $modalidades['rcampo_submultiselect_select']; //Tenemos la modalidad
-                                    $tipo_campo = $modalidades['rmas_campos_subselect']; //tipo de campo
-                                    //var_dump($modalidades);
-                                    switch($tipo_campo){ //en posgrado hay que hacer un switch, por que el tipo de campo tiene 2 opciones
-                                        case '4': //Campo de Selección multiple (USANDO ACTUALMENTE)
-                                            foreach ($modalidad as $carreras) {
-                                                $parent_tres = $carreras['rcampo_subsubmultiselect_select_name']; //parent 
-                                                $carrera = $carreras['rcampo_subsubmultiselect_carreras']; //bucle de carreras 
-                                                $s_place = $carreras['rcampo_subsubmultiselect_select_place']; //placeholder primera opcion
-                                                //var_dump($carreras);
-                                                echo '<div class="form__box" data-parent="'.$parent.'" data-parent3="'.$parent_tres.'">';
-                                                    echo '<div class="form__input-select-wrapper" style="width: 100%;">';
-                                                        echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
-                                                        echo '<option>'.$s_place.'</option>';
-                                                            foreach ($carrera as $carre) {
-                                                                $post_id = $carre['id'];
-                                                                $titulo = get_the_title($post_id);
-                                                                $slug = get_post_field('post_name', $post_id);
-                                                                echo '<option value="'.$slug.'">'.$titulo.'</option>';       
-                                                            }
-                                                        echo '</select>';
-                                                    echo '</div>';
-                                                echo '</div>';
-                                            }
-
-                                            break;
-
-                                        case '6': //Campo de Selección de Carreras (RELLENAR CONTENIDO Y PROBAR)
-                                            foreach ($modalidad as $carreras) {
-                                                $parent_tres = $carreras['rcampo_select_value'];//parent
-                                                $carrera = $carreras['rcampo_subselect_carreras'];//bucle de carreras
-                                                $s_place = $carreras['rcampo_subselect_select_place'];//placeholder   
-                                                echo '<div class="form__box" data-parent="'.$parent.'" data-parent3="'.$parent_tres.'">';
-                                                    echo '<div class="form__input-select-wrapper" style="width: 100%;">';
-                                                        echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
-                                                        echo '<option>'.$s_place.'</option>';
-                                                            foreach ($carrera as $carre) {
-                                                                $post_id = $carre['id'];
-                                                                $titulo = get_the_title($post_id);
-                                                                $slug = get_post_field('post_name', $post_id);
-                                                                echo '<option value="'.$slug.'">'.$titulo.'</option>';       
-                                                            }
-                                                        echo '</select>';
-                                                    echo '</div>';
-                                                echo '</div>';
-                                            }
-                                            break;
-                                    }
-                                }
-                            }else if($rama_pregrado){
-                                foreach ($rama_pregrado as $modalidades) { //for each a las submodalidades
-                                    $modalidad = $modalidades['r_two_subselect_carreras']; //Tenemos la modalidad
-                                    $tipo_campo = $modalidades['r_two_campos_subselect']; //tipo de campo
-                                    switch($tipo_campo){ //en pregrado hay que hacer un switch, por que el tipo de campo tiene 2 opciones
-                                        case '4': //Campo de Selección multiple (RELLENAR CONTENIDO Y PROBAR)
-                                            break;
-
-                                        case '6': //Campo de Selección de Carreras (USANDO ACTUALMENTE)
-                                            echo 'Select actual de pregrado';
-                                            echo '<br>';
-                                            break;
-                                    }
-                                }   
-                            }
-                        }
-
-                            
-
-                        echo   '</div>';
                 break;
-
-
-
-
-
-
-
-
                 case '5': //campo oculto
                     $value = $campo['campo_value'];
-                    $name = $campo['campo_name_text'];
+                    $name = $campo['campo_name'];
                     echo '<input name="'.$name.'" type="hidden" value="'.$value.'">';
                 break;
                 case '6': //campo carreras
-                    $no_option = $campo['campo_placeholder_select'];
+                    $no_option = $campo['campo_placeholder'];
                     $size = $campo['campo_tamano'];
                     $carreras = $campo['campo_carreras'];
                     echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
-                    echo '    <select name="nCarrera" data-name="nCarrera" class="form__input-select w-select">';
+                    echo '    <select data-name="nCarrera" class="form__input-select w-select">';
                     echo '        <option value="" disabled selected>'.$no_option.'</option>';
                     foreach ($carreras as $carrera) {
                         $post_id = $carrera['id'];
@@ -265,6 +84,7 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
                         echo '<option value="'.$slug.'">'.$titulo.'</option>';
                     }
                     echo '    </select>';
+                    echo '<div data-container="carreraContainer"></div>';
                     echo '</div>';
                     break;
                 break;
@@ -272,7 +92,7 @@ $campos = carbon_get_post_meta(get_the_ID(), 'complex_form_2');
         }
     ?>    
 
-    <button type="submit" class="button is-form w-button" style="width: 100%">Enviar</button>
+    <button type="submit" class="button is-form w-button" style="width: 100%"><?= $boton ?></button>
 </div>
     <!--<div class="form_body">
         <div class="form_campos">
