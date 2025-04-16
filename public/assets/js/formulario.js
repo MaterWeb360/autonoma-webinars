@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const formulario = {
-        //dni:{ campo: document.getElementById('dni'), valido: false },
+        dni:{ campo: document.getElementById('dni'), valido: false },
         
         //agregar objetos anidados con las propiedades campo y valido. 
-        // En campo se indica la ubicación del campo
-        // valido es un booleano con el que inicia el campo en la validacion
+        //En campo se indica la ubicación del campo
+        //valido es un booleano con el que inicia el campo en la validacion
     }
 
     const comprobarLetras = (input, limite_chars, sinespacio) => {

@@ -1,4 +1,4 @@
-<script>
+<!--<script>
     Parsley.addMessages('es', {
         defaultMessage: "Este valor parece ser inválido.",
         type: {
@@ -24,5 +24,5 @@
         equalto: "Este valor debe ser idéntico."
     });
     Parsley.setLocale('es');
-</script>
+</script>-->
 <script src="<?php echo get_template_directory_uri(); ?>/public/assets/js/envio.js"></script>

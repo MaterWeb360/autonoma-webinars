@@ -60,7 +60,6 @@
     }
     .form__input-radio-wrapper{
       display:flex;
-      justify-content: space-between;
       flex-wrap:wrap;
       gap:0.5rem;
     }
@@ -73,6 +72,12 @@
     }
     .form__input-radio-button::hover {
       cursor: pointer;
+    }
+    .error-input{
+      border: 1px solid red;
+    }
+    .sucess-input{
+      border: 1px solid green;
     }
   </style>
  

@@ -43,8 +43,9 @@ function getGET() {
   $.fn.serializeObject = function () {
     var obj = {};
     var arr = this.serializeArray();
-  
+    
     arr.forEach(function (item) {
+      // Si el campo ya existe, lo convertimos en un array y agregamos el valor
       if (obj[item.name] === undefined) {
         obj[item.name] = item.value || "";
       } else {
@@ -55,6 +56,14 @@ function getGET() {
       }
     });
   
+    // Aseguramos que los checkboxes y radios no seleccionados también se incluyan
+    this.find('input[type="checkbox"], input[type="radio"]').each(function () {
+      var name = this.name;
+      if (obj[name] === undefined) {
+        obj[name] = "";  // Si no está en el objeto, lo agregamos con un valor vacío
+      }
+    });
+    
     // Captura UTM desde la URL y los agrega con los nombres correctos
     var utms = getGET();
   
@@ -65,6 +74,7 @@ function getGET() {
   
     return obj;
   }
+  
   
 var camposRequeridos = {
     cKeyAccess: "",
@@ -175,88 +185,157 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Evento de recoleccion de datos del formulario
     formulario.addEventListener('submit', function (e) {
-        e.preventDefault(); // Evita la recarga de la página
+        e.preventDefault();
         let action = formulario.getAttribute('action');
         let form = $(this);
+        let submitButton = form.find('button[type="submit"], input[type="submit"]');
         let datosForm = form.serializeObject();
-        let datosFinales = {};
-        for (let key in camposRequeridos) {
-            if (datosForm.hasOwnProperty(key)) {
-                datosFinales[key] = datosForm[key];
-            } else {
-                datosFinales[key] = ""; // o podrías usar null si prefieren así
-            }
+        let checkboxRequeridosNoMarcados = false;
+        form.find('input[type="checkbox"][required]').each(function() {
+          if (!this.checked) {
+            checkboxRequeridosNoMarcados = true;
+            console.log("Debe marcar los checkbox requeridos");
+          }
+        });
+        if (checkboxRequeridosNoMarcados) {
+          console.log('No se puede enviar el formulario debido a los checkboxes no marcados');
+          return;
         }
-        validarDatos(datosFinales);
-        //sendDatos(action,datosFinales);
+        validarDatos(datosForm,form);
+        if(validarDatos(datosForm,form)){
+            submitButton.attr('disabled', 'disabled');
+            let datosFinales = {};
+            for (let key in camposRequeridos) {
+                if (datosForm.hasOwnProperty(key)) {
+                    datosFinales[key] = datosForm[key];
+                } else {
+                    datosFinales[key] = "";
+                }
+            }
+            console.log(datosFinales);
+            sendDatos(action,datosFinales)
+        }else{
+          console.log('no paso la validacion');
+          submitButton.removeAttr('disabled');
+        }
+
     })
 
+
     //Validacion de datos
-    function validarDatos(datos) {
-      var camposValidar = {
-        cKeyAccess:        { valor: "", tipo: "texto" },
-        cCodFormExterno:   { valor: "", tipo: "texto" },
-        cNombres:          { valor: "", tipo: "letras" },
-        cApellidos:        { valor: "", tipo: "letras" },
-        cCelular:          { valor: "", tipo: "telefono" },
-        cCorreo:           { valor: "", tipo: "email" },
-        nTipDocumento:     { valor: "", tipo: "numero" },
-        cDocumento:        { valor: "", tipo: "dni" },
-        nPrograma:         { valor: "", tipo: "numero" },
-        cPrograma:         { valor: "", tipo: "letras" },
-        nSubPrograma:      { valor: "", tipo: "numero" },
-        cSubPrograma:      { valor: "", tipo: "letras" },
-        nModalidad:        { valor: "", tipo: "numero" },
-        cModalidad:        { valor: "", tipo: "letras" },
-        nCarrera:          { valor: "", tipo: "numero" },
-        cCarrera:          { valor: "", tipo: "letras" },
-        cDistrito:         { valor: "", tipo: "letras" },
-        cDepartamento:     { valor: "", tipo: "letras" },
-        cPais:             { valor: "", tipo: "letras" },
-        cColegio:          { valor: "", tipo: "letras" },
-        cGrado:            { valor: "", tipo: "letras" },
-        nHorario:          { valor: "", tipo: "numero" },
-        cHorario:          { valor: "", tipo: "letras" },
-        cGenero:           { valor: "", tipo: "letras" },
-        cNacionalidad:     { valor: "", tipo: "letras" },
-        cNombrePadreApo:   { valor: "", tipo: "letras" },
-        cCelPadreApo:      { valor: "", tipo: "telefono" },
-        cCorreoPadreApo:   { valor: "", tipo: "email" },
-        cAnioEgreso:       { valor: "", tipo: "numero" },
-        cTurno:            { valor: "", tipo: "letras" },
-        cOcupacion:        { valor: "", tipo: "texto" },
-        cEmpresa:          { valor: "", tipo: "texto" },
-        cCargo:            { valor: "", tipo: "texto" },
-        cUtmSource:        { valor: "", tipo: "tracking" },
-        cUtmMedium:        { valor: "", tipo: "tracking" },
-        cUtmCampaign:      { valor: "", tipo: "tracking" },
-        cGclid:            { valor: "", tipo: "tracking" },
-        cAux1:             { valor: "", tipo: "texto" },
-        cAux2:             { valor: "", tipo: "texto" },
-        cAux3:             { valor: "", tipo: "texto" },
-        cAux4:             { valor: "", tipo: "texto" },
-        cAux5:             { valor: "", tipo: "texto" },
-        cAux6:             { valor: "", tipo: "texto" },
-        cAux7:             { valor: "", tipo: "texto" },
-        cAux8:             { valor: "", tipo: "texto" },
-        cAux9:             { valor: "", tipo: "texto" },
-        cAux10:            { valor: "", tipo: "texto" },
-        cAux11:            { valor: "", tipo: "texto" },
-        cAux12:            { valor: "", tipo: "texto" },
-        cAux13:            { valor: "", tipo: "texto" },
-        cAux14:            { valor: "", tipo: "texto" },
-        cAux15:            { valor: "", tipo: "texto" }
-      };
-      for (const campo in camposValidar) {
-        const valor = datos[campo];
-        console.log(datos[campo]);
+    function validarDatos(datos, formulario) {
+      const errores = [];
+      const inputs = formulario[0].querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select');
+        var err = 0;
+    
+      inputs.forEach(input => {
+        const valor = input.value.trim();
+        const tipo = input.type;
+
+        //Quitar clases previas de error
+        input.classList.remove('error-input');
+        input.classList.remove('sucess-input');
+        if (input.tagName === 'SELECT') {
+          const wrapper = input.closest('.form__input-select-wrapper');
+          const selectedText = input.options[input.selectedIndex].textContent.trim();
+      
+          if (wrapper) {
+            if (
+              selectedText === '' ||
+              selectedText.toLowerCase().includes('tipo') || // ej. "Tipo de documento"
+              input.selectedIndex === 0
+            ) {
+              wrapper.classList.remove('sucess-input');
+              wrapper.classList.add('error-input');
+              err++;
+            } else {
+              wrapper.classList.remove('error-input');
+              wrapper.classList.add('sucess-input');
+            }
+          }
+      
+          return;
+        }
+        if (tipo === 'text') {
+          if (input.name === 'cDocumento') {
+            if(valor){
+              const select = document.querySelector('[data-name="nTipDocumento"]');
+              const opcionSeleccionada = select.options[select.selectedIndex].textContent.trim();
+              if (opcionSeleccionada === 'DNI') {
+                if (valor.match(/^\d{8}$/)) {
+                  input.classList.add('sucess-input');
+                } else {
+                  input.classList.add('error-input');
+                  err++;
+                }
+              } else if (opcionSeleccionada === 'Carnet de extranjería') {
+                if (valor.match(/^[a-zA-Z0-9]{9,}$/)) {
+                  input.classList.add('sucess-input');
+                } else {
+                  input.classList.add('error-input');
+                  err++;
+                }
+              } else if (opcionSeleccionada === 'Pasaporte') {
+                if (valor.match(/^[a-zA-Z0-9]{6,}$/)) {
+                  input.classList.add('sucess-input');
+                } else {
+                  input.classList.add('error-input');
+                  err++;
+                }
+              }
+            }else{
+              input.classList.add('error-input');
+              err++;
+            }
+            return;
+          }
+          if (valor) {
+            if (!valor.match(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/)) {
+              input.classList.add('sucess-input');
+            } else {
+              input.classList.add('error-input');
+              err++;
+            }
+          } else {
+            input.classList.add('error-input');
+            err++;
+          }
+        }
+        if (tipo === 'email') {
+          if (valor) {
+            if (valor.match(/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)) {
+              input.classList.add('sucess-input');
+            } else {
+              input.classList.add('error-input');
+              err++;
+            }
+          } else {
+            input.classList.add('error-input');
+            err++;
+          }
+        }
+        if (tipo === 'number') {
+          if (valor) {
+            if (valor.match(/^9\d{8}$/)) {
+              input.classList.add('sucess-input');
+            } else {
+              input.classList.add('error-input');
+              err++;
+            }
+          } else {
+            input.classList.add('error-input');
+            err++;
+          }
+        }
+      })
+      if (err === 0) {
+        return true; // Todo validado correctamente
+      } else {
+        return false; // Hubo errores
       }
-
-
-
-
     }
-
+    
+    
     //Funcion para envio de datos
     function sendDatos(action,datosForm) {
         var typ ="http://localhost/autonoma-webinars/gracias/";
@@ -272,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           success: function (data) {
             console.log(data);
-            window.location = typ;
+            //window.location = typ;
           },
           error: function (e) {
             console.log(e, e.response);

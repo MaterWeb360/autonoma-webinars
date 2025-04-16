@@ -31,13 +31,13 @@ function tema_enqueue_scripts()
         true
     );
 
-    wp_enqueue_script(
-        'tema-parsley',
-        'https://parsleyjs.org/dist/parsley.js',
-        ['jquery'],
-        '1.0',
-        true
-    );
+    //wp_enqueue_script(
+    //    'tema-parsley',
+    //    'https://parsleyjs.org/dist/parsley.js',
+    //    ['jquery'],
+    //    '1.0',
+    //    true
+    //);
 
     wp_enqueue_script(
         'tema-scripts',

@@ -63,14 +63,14 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $radios = $campo['campo_radio'];
                     $name = $campo['campo_name'];
                     $name_option = $campo['campo_name_option'];
-                        echo '<div class="form__input-radio-group" data-nivel="1">';
+                        echo '<div class="form__input-radio-group" data-nivel="1" style="width:100%">';
                             echo '   <div class="form__input-radio-label">'.$plaholder.'</div>';
                             echo '   <div class="form__input-radio-wrapper">';
                                 foreach ($radios as $radio) {
                                     $value = $radio['radio_grupo_value'];
                                     $label = $radio['radio_grupo_label'];
                                     echo '<label class="form__input-radio-button">';
-                                    echo '  <input type="radio" name="'.$name.'" value="'.$value.'" data-id="'.$value.'">';
+                                    echo '  <input required type="radio" name="'.$name.'" value="'.$value.'" data-id="'.$value.'">';
                                     echo '  <p>'.$label.'</p>';
                                     echo '<input type="hidden" data-name="'.$name_option .'" value="'.$label.'">';
                                     echo '</label>';
