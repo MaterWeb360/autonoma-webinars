@@ -23,6 +23,19 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $size = $campo['campo_tamano'];
                     echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" style="width: '.$size.'">';
                 break;
+                case '2': //checkbox
+                $placeholder = $campo['campo_placeholder'];
+                $resaltado = $campo['check_resaltado'];
+                $enlace = $campo['check_enlace'];
+                $name = $campo['check_name'];
+                $required = $campo['check_required'] ? 'required' : '';
+                $texto_resaltado = '<a href="' . esc_url($enlace) . '" target="_blank">' . esc_html($resaltado) . '</a>';
+                $placeholder_con_enlace = str_replace($resaltado, $texto_resaltado, $placeholder);
+                echo '<label style="font-size: 14px">';
+                echo '    <input type="checkbox" name="' . esc_attr($name) . '" value="1" ' . $required . ' style="margin-right: 5px">';
+                echo      $placeholder_con_enlace;
+                echo '</label>';                    
+                break;
                 case '3': // campo select
                     //var_dump($campo);
                     $size = $campo['campo_tamano'];

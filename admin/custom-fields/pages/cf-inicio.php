@@ -41,12 +41,12 @@ Container::make('post_meta', 'formulario', 'Formulario')
                     ->set_width(100)
                     ->set_options([
                         '1' => 'Campo de Texto',
+                        '2' => 'Campo checkbox',
                         '3' => 'Campo de Selección',
                         '4' => 'Campo de Opciones',
                         '5' => 'Campo Oculto',
                         '6' => 'Campo de Selección de Carreras',
                     ]),
-                
                 //Placeholder
                 Field::make('text', 'campo_placeholder', 'Título del campo')
                     ->set_help_text('Escribe el texto que describe al campo')
@@ -56,7 +56,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['1','3','4','6'],
+                            'value' => ['1','2','3','4','6'],
                             'compare' => 'IN',
                         ],
                     ]), 
@@ -249,11 +249,52 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             Nuevo Grupo de Radio Buttons
                         <% } %>
                     '),
+                //CHECKBOX
+                Field::make('text', 'check_resaltado', __('Colocar aqui nuevamente el texto que llevará el enlace'))
+                    ->set_width(33)
+                    ->set_conditional_logic(array(
+                        'relation' => 'AND',
+                        array(
+                            'field' => 'campos',
+                            'value' => '2',
+                            'compare' => '=',
+                        ),
+                    )),
+                Field::make('text', 'check_enlace', __('Colocar el enlace para el texto resaltado'))
+                    ->set_width(33)
+                    ->set_conditional_logic(array(
+                        'relation' => 'AND',
+                        array(
+                            'field' => 'campos',
+                            'value' => '2',
+                            'compare' => '=',
+                        ),
+                    )),
+                Field::make('text', 'check_name', __('Identificador del campo'))
+                    ->set_width(50)
+                    ->set_conditional_logic(array(
+                        'relation' => 'AND',
+                        array(
+                            'field' => 'campos',
+                            'value' => '2',
+                            'compare' => '=',
+                        ),
+                    )),
+                Field::make('checkbox', 'check_required', '¿Este checkbox es requerido para enviar el formulario?')
+                    ->set_width(50)
+                    ->set_conditional_logic(array(
+                        'relation' => 'AND',
+                        array(
+                            'field' => 'campos',
+                            'value' => '2',
+                            'compare' => '=',
+                        ),
+                    )),
 
             ))
             ->set_header_template('Campo: <%- campo_placeholder%> | Tipo: <% switch(campos){
             case "1" : %> Campo de Texto
-            <% break; case "2" : %> Crear Campos Dependientes
+            <% break; case "2" : %> Campo Checkbox
             <% break; case "3" : %> Campo de Selección
             <% break; case "4" : %> Campo de Opciones
             <% break; case "5" : %> Campo Oculto

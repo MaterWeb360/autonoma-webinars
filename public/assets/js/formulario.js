@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const formulario = {
+        //dni:{ campo: document.getElementById('dni'), valido: false },
+        
         //agregar objetos anidados con las propiedades campo y valido. 
         // En campo se indica la ubicación del campo
         // valido es un booleano con el que inicia el campo en la validacion
@@ -25,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         input.addEventListener('input', limpiarInput);
     };
-
 
     const comprobarCelular = (input) => {
         const LIMITE_CHARS = 9;

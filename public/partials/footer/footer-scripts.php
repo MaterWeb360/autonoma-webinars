@@ -1,6 +1,3 @@
-<?php
-?>
-<script src="<?php echo get_template_directory_uri(); ?>/public/assets/js/envio.js"></script>
 <script>
     Parsley.addMessages('es', {
         defaultMessage: "Este valor parece ser inválido.",
@@ -28,3 +25,4 @@
     });
     Parsley.setLocale('es');
 </script>
+<script src="<?php echo get_template_directory_uri(); ?>/public/assets/js/envio.js"></script>

@@ -1,4 +1,4 @@
-
+//Funcion para obtener los utms
 function getGET() {
     var loc = document.location.href;
     var getString = loc.split("?")[1];
@@ -66,7 +66,7 @@ function getGET() {
     return obj;
   }
   
-const camposRequeridos = {
+var camposRequeridos = {
     cKeyAccess: "",
     cCodFormExterno: "",
     cNombres: "",
@@ -120,10 +120,12 @@ const camposRequeridos = {
     cAux14: "",
     cAux15: ""
   };
-  
+
+//Recopilacion y envio de datos
 document.addEventListener('DOMContentLoaded', function () {
     const formulario = document.getElementById('formularioAutonoma');
     
+    // 
     formulario.querySelectorAll('select[data-name]').forEach(select => {
         select.addEventListener('change', function () {
             const selectedText = this.options[this.selectedIndex].text;
@@ -145,9 +147,33 @@ document.addEventListener('DOMContentLoaded', function () {
                 hiddenInput.value = selectedText;
                 hiddenInput.setAttribute('name', hiddenInput.dataset.name);
             }
-        });
-    });
+        })
+    })
 
+    // 
+    const radios = formulario.querySelectorAll('input[type="radio"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            if (this.checked) {
+                const groupName = this.name;
+
+                // Elimina name de todos los inputs ocultos de este grupo
+                const hiddenInputs = formulario.querySelectorAll(`input[type="hidden"][data-name][name="${groupName.replace('n', 'c')}"]`);
+                hiddenInputs.forEach(input => {
+                    input.removeAttribute('name');
+                });
+
+                // Agrega name al input oculto correspondiente
+                const label = this.closest('label');
+                const hidden = label.querySelector('input[type="hidden"][data-name]');
+                if (hidden) {
+                    hidden.setAttribute('name', hidden.dataset.name);
+                }
+            }
+        })
+    })
+
+    //Evento de recoleccion de datos del formulario
     formulario.addEventListener('submit', function (e) {
         e.preventDefault(); // Evita la recarga de la página
         let action = formulario.getAttribute('action');
@@ -161,11 +187,79 @@ document.addEventListener('DOMContentLoaded', function () {
                 datosFinales[key] = ""; // o podrías usar null si prefieren así
             }
         }
-        sendDatos(action,datosFinales);
+        validarDatos(datosFinales);
+        //sendDatos(action,datosFinales);
     })
 
+    //Validacion de datos
+    function validarDatos(datos) {
+      var camposValidar = {
+        cKeyAccess:        { valor: "", tipo: "texto" },
+        cCodFormExterno:   { valor: "", tipo: "texto" },
+        cNombres:          { valor: "", tipo: "letras" },
+        cApellidos:        { valor: "", tipo: "letras" },
+        cCelular:          { valor: "", tipo: "telefono" },
+        cCorreo:           { valor: "", tipo: "email" },
+        nTipDocumento:     { valor: "", tipo: "numero" },
+        cDocumento:        { valor: "", tipo: "dni" },
+        nPrograma:         { valor: "", tipo: "numero" },
+        cPrograma:         { valor: "", tipo: "letras" },
+        nSubPrograma:      { valor: "", tipo: "numero" },
+        cSubPrograma:      { valor: "", tipo: "letras" },
+        nModalidad:        { valor: "", tipo: "numero" },
+        cModalidad:        { valor: "", tipo: "letras" },
+        nCarrera:          { valor: "", tipo: "numero" },
+        cCarrera:          { valor: "", tipo: "letras" },
+        cDistrito:         { valor: "", tipo: "letras" },
+        cDepartamento:     { valor: "", tipo: "letras" },
+        cPais:             { valor: "", tipo: "letras" },
+        cColegio:          { valor: "", tipo: "letras" },
+        cGrado:            { valor: "", tipo: "letras" },
+        nHorario:          { valor: "", tipo: "numero" },
+        cHorario:          { valor: "", tipo: "letras" },
+        cGenero:           { valor: "", tipo: "letras" },
+        cNacionalidad:     { valor: "", tipo: "letras" },
+        cNombrePadreApo:   { valor: "", tipo: "letras" },
+        cCelPadreApo:      { valor: "", tipo: "telefono" },
+        cCorreoPadreApo:   { valor: "", tipo: "email" },
+        cAnioEgreso:       { valor: "", tipo: "numero" },
+        cTurno:            { valor: "", tipo: "letras" },
+        cOcupacion:        { valor: "", tipo: "texto" },
+        cEmpresa:          { valor: "", tipo: "texto" },
+        cCargo:            { valor: "", tipo: "texto" },
+        cUtmSource:        { valor: "", tipo: "tracking" },
+        cUtmMedium:        { valor: "", tipo: "tracking" },
+        cUtmCampaign:      { valor: "", tipo: "tracking" },
+        cGclid:            { valor: "", tipo: "tracking" },
+        cAux1:             { valor: "", tipo: "texto" },
+        cAux2:             { valor: "", tipo: "texto" },
+        cAux3:             { valor: "", tipo: "texto" },
+        cAux4:             { valor: "", tipo: "texto" },
+        cAux5:             { valor: "", tipo: "texto" },
+        cAux6:             { valor: "", tipo: "texto" },
+        cAux7:             { valor: "", tipo: "texto" },
+        cAux8:             { valor: "", tipo: "texto" },
+        cAux9:             { valor: "", tipo: "texto" },
+        cAux10:            { valor: "", tipo: "texto" },
+        cAux11:            { valor: "", tipo: "texto" },
+        cAux12:            { valor: "", tipo: "texto" },
+        cAux13:            { valor: "", tipo: "texto" },
+        cAux14:            { valor: "", tipo: "texto" },
+        cAux15:            { valor: "", tipo: "texto" }
+      };
+      for (const campo in camposValidar) {
+        const valor = datos[campo];
+        console.log(datos[campo]);
+      }
+
+
+
+
+    }
+
+    //Funcion para envio de datos
     function sendDatos(action,datosForm) {
-        //var typ = "https://www.autonoma.pe/evaluacion-preferente/gracias";
+        var typ ="http://localhost/autonoma-webinars/gracias/";
         jQuery.ajax({
           type: "POST",
           url: action,
@@ -178,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           success: function (data) {
             console.log(data);
-            //window.location = typ;
+            window.location = typ;
           },
           error: function (e) {
             console.log(e, e.response);
@@ -187,6 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
   })
 
+//
 const camposEspeciales = ['nCarrera', 'nModalidad', 'nSubPrograma', 'nPrograma'];
 camposEspeciales.forEach(campo => {
     $('[data-name]').on('change', function () {
@@ -216,34 +311,6 @@ camposEspeciales.forEach(campo => {
         }
     });
     
-});
-document.addEventListener('DOMContentLoaded', function () {
-    const formulario = document.getElementById('formularioAutonoma');
-
-    // === Evento change para radios con inputs con data-name ===
-    const radios = formulario.querySelectorAll('input[type="radio"]');
-
-    radios.forEach(radio => {
-        radio.addEventListener('change', function () {
-            if (this.checked) {
-                const groupName = this.name;
-
-                // Elimina name de todos los inputs ocultos de este grupo
-                const hiddenInputs = formulario.querySelectorAll(`input[type="hidden"][data-name][name="${groupName.replace('n', 'c')}"]`);
-                hiddenInputs.forEach(input => {
-                    input.removeAttribute('name');
-                });
-
-                // Agrega name al input oculto correspondiente
-                const label = this.closest('label');
-                const hidden = label.querySelector('input[type="hidden"][data-name]');
-                if (hidden) {
-                    hidden.setAttribute('name', hidden.dataset.name);
-                }
-            }
-        });
-    });
-
-});
+})
 
 
