@@ -167,6 +167,35 @@ Container::make('post_meta', 'formulario', 'Formulario')
                                     'compare' => '=',
                                 ),
                             )),
+                        Field::make('checkbox', 'campo_select_check', __('Activar carreras'))
+                            ->set_option_value('1')
+                            ->set_help_text('Marca esta opción para mostrar las carreras.'),
+                        Field::make('text', 'campo_select_carreras_placeholder', __('Título del campo'))
+                            ->set_width(100)
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ]), 
+                        Field::make('association', 'campo_select_carreras', __('Escoger carreras o programas'))
+                            ->set_types([
+                                [
+                                    'type'      => 'post',
+                                    'post_type' => 'carreras', 
+                                ],
+                            ])
+                            ->set_conditional_logic([
+                                'relation' => 'AND',
+                                [
+                                    'field' => 'campo_select_check',
+                                    'value' => '1', 
+                                    'compare' => '=',
+                                ],
+                             ]),
+                        
             
                              
                     ))

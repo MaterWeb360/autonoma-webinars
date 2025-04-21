@@ -79,6 +79,9 @@
     .sucess-input{
       border: 1px solid green;
     }
+    .oculto{
+      display:none !important;
+    }
   </style>
  
 </head>

@@ -43,7 +43,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $s_name = $campo['campo_name'];
                     $bucleOps = $campo['campo_select'];
                     $name_option = $campo['campo_name_option'];
-                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'">';
+                    echo '<div class="form__input-select-wrapper" style="width: '.$size.'" data-nivel="1">';
                         echo '<select name="" data-name="'.$s_name.'" class="form__input-select w-select">';
                         echo '<option>'.$s_place.'</option>';
                         foreach ($bucleOps as $option) {
@@ -56,6 +56,31 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         echo '<input type="hidden" data-name="'.$name_option.'" value="">';
                         }
                     echo '</div>';
+                    
+                    echo '<div class="form__selects oculto" style="width: 100%">';
+                    foreach ($bucleOps as $option) {
+                        //var_dump($option);
+                        $s_check =  $option['campo_select_check'];//check
+                        $s_place = $option['campo_select_carreras_placeholder']; //placeholder
+                        $parent = $option['campo_select_value'];//parent
+                        $bucleSelec = $option['campo_select_carreras'];//bucle de carreras
+                        if($s_check == '1'){
+                            echo '<div class="form__input-select-wrapper oculto" data-nivel="2" data-parent="'.$parent.'" style="width: 100%">';
+                                echo '<select name="" data-name="nCarrera" class="form__input-select w-select">';
+                                    echo '<option disabled selected>'.$s_place.'</option>';
+                                    foreach ($bucleSelec as $carrera) {
+                                        $post_id = $carrera['id'];
+                                        $titulo = get_the_title($post_id);
+                                        $slug = get_post_field('post_name', $post_id);
+                                        echo '<option value="'.$slug.'">'.$titulo.'</option>';
+                                    }
+                                echo '</select>';
+                                echo '<div data-container="carreraContainer"></div>';
+                            echo '</div>';
+                        }
+                    }
+                    echo '</div>';
+                    
                     break;
                 case '4': //campo radio
                     //var_dump($campo);
@@ -97,7 +122,6 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         echo '<option value="'.$slug.'">'.$titulo.'</option>';
                     }
                     echo '    </select>';
-                    echo '<div data-container="carreraContainer"></div>';
                     echo '</div>';
                     break;
                 break;
