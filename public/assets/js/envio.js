@@ -133,40 +133,42 @@ var camposRequeridos = {
 
   document.addEventListener('DOMContentLoaded', () => {
     const formulario = document.querySelector('form');
-    const camposConNivel = ['nPrograma', 'nSubPrograma', 'nModalidad', 'nCarrera'];
-  
+
     // 1. Manejo de selects con niveles dependientes
-    const nivel1Divs = document.querySelectorAll('[data-nivel="1"]');
-    nivel1Divs.forEach((div, i) => {
+    const nivel1Divs = formulario.querySelectorAll('[data-nivel="1"]');
+    nivel1Divs.forEach((div) => {
       const select = div.querySelector('select');
-      const dataName = select?.dataset.name;
-  
-      if (select && camposConNivel.includes(dataName)) {
+
+      if (select) {
         select.addEventListener('change', (e) => {
           const valorSeleccionado = e.target.value;
-  
-          // Asegurarse que el contenedor padre esté visible
-          div.classList.remove('oculto');
-  
-          // Ocultar todos los nivel 2
-          const nivel2Divs = document.querySelectorAll('[data-nivel="2"]');
-          nivel2Divs.forEach(n2 => {
+
+          // Tomamos el contenedor de hijos que está justo después de este nivel 1
+          const grupoHijos = div.nextElementSibling;
+          if (!grupoHijos || !grupoHijos.classList.contains('form__selects')) return;
+
+          // Buscar si hay hijos en este contenedor que dependan de esta selección
+          const hijosCorrespondientes = grupoHijos.querySelectorAll(`[data-nivel="2"][data-parent="${valorSeleccionado}"]`);
+
+          // Si no hay hijos para este valor, salimos (no hacemos nada)
+          if (hijosCorrespondientes.length === 0) return;
+
+          // Ocultamos todos los hijos en este grupo (no en todo el form)
+          grupoHijos.querySelectorAll('[data-nivel="2"]').forEach(n2 => {
             n2.classList.add('oculto');
           });
-  
-          // Mostrar los hijos que coincidan
-          const hijosVisibles = document.querySelectorAll(`[data-nivel="2"][data-parent="${valorSeleccionado}"]`);
-          hijosVisibles.forEach(hijo => {
+
+          // Mostramos solo los hijos correspondientes
+          hijosCorrespondientes.forEach(hijo => {
             hijo.classList.remove('oculto');
-  
-            // También mostrar su contenedor si está oculto
+
             const wrapper = hijo.closest('.form__selects');
             if (wrapper) wrapper.classList.remove('oculto');
           });
         });
       }
     });
-  
+    
     // 2. Selects que actualizan input oculto
     formulario.querySelectorAll('select[data-name]').forEach(select => {
       select.addEventListener('change', function () {
@@ -218,33 +220,31 @@ var camposRequeridos = {
     });
   
     // 4. Campos especiales (con contenedor dinámico)
-    const camposEspeciales = ['nCarrera', 'nModalidad', 'nSubPrograma', 'nPrograma'];
-    camposEspeciales.forEach(campo => {
-      document.querySelectorAll(`select[data-name="${campo}"]`).forEach(select => {
-        select.addEventListener('change', function () {
-          const selectedText = this.options[this.selectedIndex].text;
-          const dataName = this.getAttribute('data-name');
-          const targetName = `c${dataName.slice(1)}`;
-  
-          // Limpiar otros selects iguales
-          document.querySelectorAll(`select[data-name="${dataName}"]`).forEach(sel => {
-            if (sel !== this) sel.removeAttribute('name');
-          });
-          this.setAttribute('name', dataName);
-  
-          // Contenedor oculto (dinámico)
-          const wrapper = this.closest('.form__input-select-wrapper');
-          const container = wrapper?.querySelector('[data-container]');
-          if (container) {
-            if (selectedText !== "") {
-              container.innerHTML = `<input type="hidden" data-name="${targetName}" name="${targetName}" value="${selectedText}">`;
-            } else {
-              container.innerHTML = '';
-            }
-          }
-        });
+    document.querySelectorAll('select[data-name]').forEach(select => {
+      select.addEventListener('change', function () {
+        const selectedText = this.options[this.selectedIndex].text.trim();
+        const dataName    = this.dataset.name;           // ej "nCarrera" o "nTipDocumento"
+        const targetName  = `c${dataName.slice(1)}`;     // ej "cCarrera" o "cTipDocumento"
+    
+        // Asegurar que sólo éste select tenga el name
+        document.querySelectorAll(`select[data-name="${dataName}"]`)
+          .forEach(s => { if (s !== this) s.removeAttribute('name') });
+        this.setAttribute('name', dataName);
+    
+        // Crear/actualizar el hidden en su data-container
+        const wrapper = this.closest('.form__input-select-wrapper');
+        const container = wrapper?.querySelector('[data-container]');
+        if (!container) return;
+    
+        if (selectedText !== "") {
+          container.innerHTML = 
+            `<input type="hidden" data-name="${targetName}" name="${targetName}" value="${selectedText}">`;
+        } else {
+          container.innerHTML = '';
+        }
       });
     });
+
   });
   
 //Recopilacion y envio de datos
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           success: function (data) {
             console.log(data);
-            window.location = typ;
+            //window.location = typ;
           },
           error: function (e) {
             console.log(e, e.response);

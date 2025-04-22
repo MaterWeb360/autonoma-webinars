@@ -3,11 +3,11 @@
 use Carbon_Fields\Field;
 
 $basic_options_container->add_tab('Generales', [
-    Field::make('separator', 'g-plugins-sep', 'Plugins de seguridad')
-        ->set_classes('separator_theme'),
-    Field::make('html', 'crb_information_text')
-        ->set_html('<button id="btn-seguridad">Instalar plugins de seguridad</button><div id="plugins-proceso"></div>')
-        ->help_text('Solo debe activarse una vez'),
+    //Field::make('separator', 'g-plugins-sep', 'Plugins de seguridad')
+    //    ->set_classes('separator_theme'),
+    //Field::make('html', 'crb_information_text')
+    //    ->set_html('<button id="btn-seguridad">Instalar plugins de seguridad</button><div id="plugins-proceso"></div>')
+    //    ->help_text('Solo debe activarse una vez'),
 
     Field::make('separator', 'g-separator_4', 'Logotipos')
         ->set_classes('separator_theme'),
