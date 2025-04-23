@@ -1,5 +1,5 @@
 <?php
-$titulo = resaltarTexto(nl2br(elCampo('vi-titulo')), 'text-color-orange');
+$titulo = resaltarTexto(nl2br(elCampo('vi-titulo')), 'color_primario');
 $videorprew = fileCampo('vi-video-pre');
 
 $video = elCampo('vi-video');
@@ -52,6 +52,6 @@ $json_encode = json_encode($videojson, JSON_UNESCAPED_SLASHES);
         }
     </script>
 </a>
-<div class="beneficios_video-text">
+<div class="beneficios_video-text color_secundario">
     <div class="heading-style-h3 text-weight-xbold"><?= $titulo ?></div>
 </div>

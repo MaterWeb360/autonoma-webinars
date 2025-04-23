@@ -1,4 +1,5 @@
 <?php
+
 $titulo = resaltarTexto(nl2br(elCampo('ca-titulo')), 'title-tiny text-color-brown');
 $lista = elCampo('ca-lista');
 

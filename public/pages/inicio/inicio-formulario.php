@@ -129,7 +129,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
         }
     ?>    
 
-    <button type="submit" class="button is-form w-button" style="width: 100%"><?= $boton ?></button>
+    <button type="submit" class="button is-form w-button fondo_primario" style="width: 100%"><?= $boton ?></button>
 </div>
     <!--<div class="form_body">
         <div class="form_campos">

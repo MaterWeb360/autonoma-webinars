@@ -44,6 +44,12 @@
   $script_header = globalCampo('g_script_header');
   echo $script_header;
   ?>
+
+  <?php
+    $colorpri = elCampo('co-color-primary');
+    $colorsec = elCampo('co-color-secundary');
+    $colorter = elCampo('co-color-terciario');
+  ?>
 <style>
     .form__input-radio-label{
       margin-bottom:0.5rem;
@@ -82,6 +88,28 @@
     .oculto{
       display:none !important;
     }
+    /*Inicio clases para cambiar de color */
+    .color_primario{
+      color: <?= $colorpri ?> !important;
+    }
+    .fondo_primario{
+      background-color: <?= $colorpri ?> !important;
+    }
+
+    .color_secundario{
+      color: <?= $colorsec ?> !important;
+    }
+    .fondo_secundario{
+      background-color: <?= $colorsec ?> !important;
+    }
+
+    .color_terciario{
+      color: <?= $colorter ?> !important;
+    }
+    .fondo_terciario{
+      background-color: <?= $colorter ?> !important;
+    }
+    /* Fin clases para cambiar de color */
   </style>
  
 </head>

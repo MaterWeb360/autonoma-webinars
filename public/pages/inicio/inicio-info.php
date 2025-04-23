@@ -13,10 +13,10 @@ $restantesTexto = implode("<br />", $lineasRestantes);
 
 <div class="beneficios_info-wrp">
     <div class="title-hero max-width-large">
-        <h2 class="heading-style-h2 text-color-brown"><?= $titulo ?></h2>
+        <h2 class="heading-style-h2 color_secundario"><?= $titulo ?></h2>
     </div>
     <div class="title_prf">
-        <p class="text-color-white"><?= $informacion ?></p>
+        <p class="color_terciario"><?= $informacion ?></p>
     </div>
     <div class="padding-bottom padding-xsmall">
     </div>
@@ -24,9 +24,9 @@ $restantesTexto = implode("<br />", $lineasRestantes);
         <div class="beneficios_details-item">
             <img src="<?= TEMA_P_IMG ?>/icon-clock.svg" loading="lazy" alt=""
                 class="beneficios_details-icon">
-            <div class="beneficios_details-info">
+            <div class="beneficios_details-info color_secundario">
                 <div class="beneficios_details-title">Duración</div>
-                <div class="beneficios_details-subtitle"><?= $duracion ?></div>
+                <div class="beneficios_details-subtitle color_secundario"><?= $duracion ?></div>
             </div>
         </div>
         <div class="line">
@@ -34,9 +34,9 @@ $restantesTexto = implode("<br />", $lineasRestantes);
         <div class="beneficios_details-item">
             <img src="<?= TEMA_P_IMG ?>/icon-clock.svg" loading="lazy" alt=""
                 class="beneficios_details-icon">
-            <div class="beneficios_details-info">
+            <div class="beneficios_details-info color_secundario">
                 <div class="beneficios_details-title">Fecha</div>
-                <div class="beneficios_details-subtitle"><?= $fecha ?></div>
+                <div class="beneficios_details-subtitle color_secundario"><?= $fecha ?></div>
             </div>
         </div>
         <div class="line">
@@ -44,9 +44,9 @@ $restantesTexto = implode("<br />", $lineasRestantes);
         <div class="beneficios_details-item">
             <img src="<?= TEMA_P_IMG ?>/icon-clock.svg" loading="lazy" alt=""
                 class="beneficios_details-icon">
-            <div class="beneficios_details-info">
+            <div class="beneficios_details-info color_secundario">
                 <div class="beneficios_details-title">Lugar</div>
-                <div class="beneficios_details-subtitle"><?= $primeraLinea ?><br>
+                <div class="beneficios_details-subtitle color_secundario"><?= $primeraLinea ?><br>
                     <span
                         class="text-size-tiny"><?= $restantesTexto ?></span>
                 </div>

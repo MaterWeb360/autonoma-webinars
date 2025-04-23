@@ -3,6 +3,27 @@
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
+Container::make('post_meta', 'colores', 'Colores del landing')
+    ->where('post_type', '=', 'page')
+    ->where('post_id', '!=', function() {
+        $gracias_page = get_page_by_path('gracias'); 
+        return $gracias_page ? $gracias_page->ID : 0;
+    })
+    ->add_fields([
+        Field::make('color', 'co-color-primary', 'Color primario')
+            ->set_width(33)
+            ->set_default_value('#fc8805')
+            ->set_palette(['#fc8805', '#36312e', '#fff']),
+        Field::make('color', 'co-color-secundary', 'Color secundario')
+            ->set_width(33)
+            ->set_default_value('#36312e')
+            ->set_palette(['#fc8805', '#36312e', '#fff']),
+        Field::make('color', 'co-color-terciario', 'Color terciario')
+            ->set_width(33)
+            ->set_default_value('#ffffff')
+            ->set_palette(['#fc8805', '#36312e', '#fff'])
+    ]);
+
 Container::make('post_meta', 'header', 'Cabecera')
     ->where('post_type', '=', 'page')
     ->where('post_id', '!=', function() {
