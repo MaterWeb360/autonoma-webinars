@@ -51,4 +51,4 @@ $email = globalCampo('g-email');
         <div>Autónoma Todos los derechos reservados</div>
     </div>
 </div>
-<a href="#form-hero" class="btn fixed w-button">INSCRÍBETE</a>
+<a href="#form-hero" class="btn fixed w-button fondo_secundario">INSCRÍBETE</a>

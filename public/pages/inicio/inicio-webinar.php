@@ -1,5 +1,7 @@
 <?php
-$titulo = resaltarTexto(nl2br(elCampo('we-titulo')), 'title-tiny text-color-brown');
+$colorpri = elCampo('co-color-primary');
+
+$titulo = resaltarTexto(nl2br(elCampo('we-titulo')), 'title-tiny color_secundario');
 $info = nl2br(elCampo('we-informacion'));
 $lista = elCampo('we-webinars');
 
@@ -27,27 +29,27 @@ foreach ($lista as $key => $item) {
             </div>
             <div class="webinar_main">
                 <div class="webinar_fecha-wrp">
-                    <div class="webinar_fecha">{$dia} {$mes}</div>
+                    <div class="webinar_fecha color_primario">{$dia} {$mes}</div>
                 </div>
                 <div class="webinar_details">
-                    <div class="webinar_detail-item">
+                    <div class="webinar_detail-item color_secundario">
                         <img src="{$tema_img}/icon-place.svg" loading="lazy" alt=""
                             class="webinar_detail-icon">
                         <div>{$ubicacion}</div>
                     </div>
-                    <div class="webinar_detail-item">
+                    <div class="webinar_detail-item color_secundario">
                         <img src="{$tema_img}/icon-clock-v.svg" loading="lazy" alt=""
                             class="webinar_detail-icon">
                         <div>{$horaAMPM}</div>
                     </div>
                 </div>
-                <div class="webinar_title">
-                    <h4 class="heading-style-h4">{$titulo_e}</h4>
+                <div class="webinar_title color_secundario">
+                    <h4 class="heading-style-h4 ">{$titulo_e}</h4>
                     <div>{$descripcion}</div>
                 </div>
                 <div class="webinar_btn">
                     <a href="{$url}" class="button w-inline-block" target="_blank">
-                        <div>Ir a evento</div>
+                        <div class="color_primario">Ir a evento</div>
                         <img src="{$tema_img}/flecha-izquierda-2.svg" loading="lazy" alt="">
                     </a>
                 </div>
@@ -59,13 +61,13 @@ foreach ($lista as $key => $item) {
 ?>
 <div class="webinar">
     <div class="padding-global full-right">
-        <div class="webinar_wrapped">
-            <div class="webinar_content">
+        <div class="webinar_wrapped fondo_primario">
+            <div class="webinar_content" style="background-image: linear-gradient(90deg, <?= $colorpri; ?> 77%, rgba(255, 255, 255, 0));">
                 <div class="webinar_title">
-                    <h2 class="heading-style-h2"><?= $titulo ?></span>
+                    <h2 class="heading-style-h2 color_terciario"><?= $titulo ?></span>
                     </h2>
                 </div>
-                <div class="webinar_prf">
+                <div class="webinar_prf color_terciario">
                     <p><?= $info ?></p>
                 </div>
             </div>

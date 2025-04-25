@@ -10,7 +10,7 @@ $subtitulo = elCampo('he-subtitulo');
 
 ?>
 
-<div class="hero">
+<div class="hero fondo_primario hero_wordpress">
     <div class="nav">
         <div class="padding-global">
             <div class="container-large">

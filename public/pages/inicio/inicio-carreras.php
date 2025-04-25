@@ -1,6 +1,6 @@
 <?php
 
-$titulo = resaltarTexto(nl2br(elCampo('ca-titulo')), 'title-tiny text-color-brown');
+$titulo = resaltarTexto(nl2br(elCampo('ca-titulo')), 'title-tiny color_secundario');
 $lista = elCampo('ca-lista');
 
 $html_lista = "";
@@ -22,7 +22,7 @@ foreach ($lista as $key => $item) {
         <div class="carreras_info">
             <h4 class="heading-style-h4">{$titulo_e}</h4>
             <a href="{$url}" class="button w-inline-block" target="_blank">
-                <div>+ información</div>
+                <div class="color_primario">+ información</div>
             </a>
         </div>
     </div>
@@ -35,7 +35,7 @@ foreach ($lista as $key => $item) {
             <div class="padding-section-large">
                 <div class="carreras_wrapper">
                     <div class="carreras_title">
-                        <h2 class="heading-style-h2 text-color-orange"><?= $titulo ?></h2>
+                        <h2 class="heading-style-h2 color_primario"><?= $titulo ?></h2>
                     </div>
                     <div class="carreras_grid"><?= $html_lista ?></div>
                 </div>

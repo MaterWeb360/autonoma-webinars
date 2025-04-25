@@ -51,6 +51,16 @@
     $colorter = elCampo('co-color-terciario');
   ?>
 <style>
+ .hero_wordpress {
+  background: 
+    url("<?= get_template_directory_uri(); ?>/public/assets/imgs/bg-right-top.svg"), 
+    url("<?= get_template_directory_uri(); ?>/public/assets/imgs/bg-left-bottom.svg"), 
+    <?= $colorpri; ?> !important;
+  background-position: 100% 0, 0 76%, 0 0 !important;
+  background-repeat: no-repeat !important;
+  background-size: auto, auto 14rem !important;
+}
+
     .form__input-radio-label{
       margin-bottom:0.5rem;
     }

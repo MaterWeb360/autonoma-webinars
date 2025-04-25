@@ -62,11 +62,12 @@ Container::make('post_meta', 'formulario', 'Formulario')
                     ->set_width(100)
                     ->set_options([
                         '1' => 'Campo de Texto',
-                        '2' => 'Campo checkbox',
+                        '2' => 'Campo Checkbox',
                         '3' => 'Campo de Selección',
                         '4' => 'Campo de Opciones',
                         '5' => 'Campo Oculto',
                         '6' => 'Campo de Selección de Carreras',
+                        '7' => 'Campo Text Area',
                     ]),
                 //Placeholder
                 Field::make('text', 'campo_placeholder', 'Título del campo')
@@ -77,10 +78,10 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['1','2','3','4','6'],
+                            'value' => ['1','2','3','4','6','7'],
                             'compare' => 'IN',
                         ],
-                    ]), 
+                    ]),
                 //Name del campo
                 Field::make('text', 'campo_name', 'Identificador del campo')
                     ->set_width(27) 
@@ -88,7 +89,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         [
                             'field' => 'campos',
-                            'value' => ['5','4','1','3'],
+                            'value' => ['5','4','1','3','7'],
                             'compare' => 'IN',
                         ],
                     ]), 
@@ -124,7 +125,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         'relation' => 'AND',
                         array(
                             'field' => 'campos',
-                            'value' => ['1','3','6'],
+                            'value' => ['1','3','6','7'],
                             'compare' => 'IN',
                         ),
                     ))
@@ -167,27 +168,22 @@ Container::make('post_meta', 'formulario', 'Formulario')
                         
                         //PLACEHOLDER - TEXT PARA ESCRIBIR LA PRIMERA OPCION DEL SELECT 
                         Field::make('text', 'campo_select_placeholder', __('Nombre del seleccionable'))
-                            ->set_width(50)
-                            ->set_conditional_logic(array(
-                                'relation' => 'AND',
-                                array(
-                                    'field' => 'parent.campos',
-                                    'value' => '3',
-                                    'compare' => '=',
-                                ),
-                            )),
+                            ->set_width(50),
                         
                         //VALUE - TEXT PARA ESCRIBIR EL CODIGO A GUARDAR
                         Field::make('text', 'campo_select_value', __('Texto o código a guardar'))
+                            ->set_width(50),
+                        //codFormExterno
+                        Field::make('text', 'campo_select1_codform', __('Código de formulario: cCodFormExterno'))
                             ->set_width(50)
-                            ->set_conditional_logic(array(
+                            ->set_conditional_logic([
                                 'relation' => 'AND',
-                                array(
-                                    'field' => 'parent.campos',
-                                    'value' => '3',
+                                [
+                                    'field' => 'campo_select_check',
+                                    'value' => '1', 
                                     'compare' => '=',
-                                ),
-                            )),
+                                ],
+                             ]),
                         Field::make('checkbox', 'campo_select_check', __('Activar carreras'))
                             ->set_option_value('1')
                             ->set_help_text('Marca esta opción para mostrar las carreras.'),
@@ -330,14 +326,14 @@ Container::make('post_meta', 'formulario', 'Formulario')
                             'compare' => '=',
                         ),
                     )),
-                Field::make('checkbox', 'check_required', '¿Este checkbox es requerido para enviar el formulario?')
+                Field::make('checkbox', 'check_required', '¿Este campo es requerido para enviar el formulario?')
                     ->set_width(50)
                     ->set_conditional_logic(array(
                         'relation' => 'AND',
                         array(
                             'field' => 'campos',
-                            'value' => '2',
-                            'compare' => '=',
+                            'value' => ['2','7'],
+                            'compare' => 'IN',
                         ),
                     )),
 
@@ -349,6 +345,7 @@ Container::make('post_meta', 'formulario', 'Formulario')
             <% break; case "4" : %> Campo de Opciones
             <% break; case "5" : %> Campo Oculto
             <% break; case "6" : %> Campo de Selección de Carreras
+            <% break; case "7" : %> Campo Text Area
             <% } %>'),
     
         Field::make('text', 'boton', 'Texto del botón del formulario')

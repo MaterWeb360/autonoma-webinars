@@ -29,7 +29,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                 $enlace = $campo['check_enlace'];
                 $name = $campo['check_name'];
                 $required = $campo['check_required'] ? 'required' : '';
-                $texto_resaltado = '<a href="' . esc_url($enlace) . '" target="_blank">' . esc_html($resaltado) . '</a>';
+                $texto_resaltado = '<a class="color_primario" href="' . esc_url($enlace) . '" target="_blank">' . esc_html($resaltado) . '</a>';
                 $placeholder_con_enlace = str_replace($resaltado, $texto_resaltado, $placeholder);
                 echo '<label style="font-size: 14px">';
                 echo '    <input type="checkbox" name="' . esc_attr($name) . '" value="1" ' . $required . ' style="margin-right: 5px">';
@@ -60,6 +60,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     echo '<div class="form__selects oculto" style="width: 100%">';
                     foreach ($bucleOps as $option) {
                         //var_dump($option);
+                        $codForm = $option['campo_select1_codform'];//codform
                         $s_check =  $option['campo_select_check'];//check
                         $s_place = $option['campo_select_carreras_placeholder']; //placeholder
                         $parent = $option['campo_select_value'];//parent
@@ -76,6 +77,9 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                                     }
                                 echo '</select>';
                                 echo '<div data-container="carreraContainer"></div>';
+                                if($codForm){
+                                echo '<input type="hidden" data-name="cCodFormExterno" value="'.$codForm.'">';
+                                }
                             echo '</div>';
                         }
                     }
@@ -122,9 +126,16 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         echo '<option value="'.$slug.'">'.$titulo.'</option>';
                     }
                     echo '    </select>';
+                    echo '<div data-container="carreraContainer"></div>';
                     echo '</div>';
                     break;
-                break;
+                case '7': //text area
+                    $placeholder = $campo['campo_placeholder'];
+                    $name = $campo['campo_name'];
+                    $size = $campo['campo_tamano'];
+                    $required = $campo['check_required'] == '1' ? 'required' : '';
+                    echo '<textarea data-requerido="'.$required.'" name="'.$name.'" placeholder="'. $placeholder.'" class="form__input-select-wrapper w-input" style="width: '.$size.'"></textarea>';
+                    break;
             } 
         }
     ?>    

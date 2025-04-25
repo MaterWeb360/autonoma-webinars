@@ -6,7 +6,7 @@ $info = nl2br(elCampo('ex-informacion'));
 $img = fileCampo('ex-img');
 ?>
 
-<div class="expositor_wrapper">
+<div class="expositor_wrapper fondo_secundario">
     <div class="expositor_title">
         <h2 class="heading-style-h2 color_primario"><?= $titulo ?></h2>
     </div>

@@ -96,8 +96,10 @@ var camposRequeridos = {
     cDistrito: "",
     cDepartamento: "",
     cPais: "",
+    cProvincia: "",
     cColegio: "",
     cGrado: "",
+    cPerCodColegio: "",
     nHorario: "",
     cHorario: "",
     cGenero: "",
@@ -198,28 +200,8 @@ var camposRequeridos = {
         }
       });
     });
-  
-    // 3. Radios que actualizan input oculto
-    formulario.querySelectorAll('input[type="radio"]').forEach(radio => {
-      radio.addEventListener('change', function () {
-        if (this.checked) {
-          const groupName = this.name;
-          const targetName = groupName.replace(/^n/, 'c');
-  
-          formulario.querySelectorAll(`input[type="hidden"][data-name="${targetName}"]`).forEach(input => {
-            input.removeAttribute('name');
-          });
-  
-          const label = this.closest('label');
-          const hidden = label?.querySelector(`input[type="hidden"][data-name="${targetName}"]`);
-          if (hidden) {
-            hidden.setAttribute('name', targetName);
-          }
-        }
-      });
-    });
-  
-    // 4. Campos especiales (con contenedor dinámico)
+
+    // 4. Selects que cambian entre si data-name
     document.querySelectorAll('select[data-name]').forEach(select => {
       select.addEventListener('change', function () {
         const selectedText = this.options[this.selectedIndex].text.trim();
@@ -244,6 +226,57 @@ var camposRequeridos = {
         }
       });
     });
+  
+    // 3. Radios que actualizan input oculto
+    formulario.querySelectorAll('input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', function () {
+        if (this.checked) {
+          const groupName = this.name;
+          const targetName = groupName.replace(/^n/, 'c');
+  
+          formulario.querySelectorAll(`input[type="hidden"][data-name="${targetName}"]`).forEach(input => {
+            input.removeAttribute('name');
+          });
+  
+          const label = this.closest('label');
+          const hidden = label?.querySelector(`input[type="hidden"][data-name="${targetName}"]`);
+          if (hidden) {
+            hidden.setAttribute('name', targetName);
+          }
+        }
+      });
+    });
+  
+    // 5
+    function manejarCambioSelect(e) {
+      const select = e.target;
+      const wrapper = select.closest('.form__input-select-wrapper');
+      if (!wrapper) return;
+  
+      const nuevoInput = wrapper.querySelector('input[data-name="cCodFormExterno"]');
+      if (!nuevoInput) return;
+  
+      // Encontrar el input actual con name="cCodFormExterno"
+      const actual = formulario.querySelector('input[name="cCodFormExterno"]');
+      if (actual) {
+          actual.removeAttribute('name');
+          actual.setAttribute('data-name', 'cCodFormExterno');
+      }
+  
+      // Asignar name al nuevo input
+      nuevoInput.setAttribute('name', 'cCodFormExterno');
+      nuevoInput.removeAttribute('data-name');
+  }
+  
+  function iniciarListeners() {
+      const selects = formulario.querySelectorAll('select');
+      selects.forEach(select => {
+          select.addEventListener('change', manejarCambioSelect);
+      });
+  }
+  
+  iniciarListeners();
+  
 
   });
   
@@ -257,18 +290,18 @@ document.addEventListener('DOMContentLoaded', function () {
         let form = $(this);
         let submitButton = form.find('button[type="submit"], input[type="submit"]');
         let datosForm = form.serializeObject();
+        //--------------------console.log(datosForm);
         let checkboxRequeridosNoMarcados = false;
+        //validacion de checkbox requeridos
         form.find('input[type="checkbox"][required]').each(function() {
           if (!this.checked) {
-            checkboxRequeridosNoMarcados = true;
-            console.log("Debe marcar los checkbox requeridos");
+            console.log('No se puede enviar el formulario debido a los checkboxes no marcados');
+            return false; // corta el each
           }
         });
-        if (checkboxRequeridosNoMarcados) {
-          console.log('No se puede enviar el formulario debido a los checkboxes no marcados');
-          return;
-        }
+        //--------------------console.log(datosForm);
         validarDatos(datosForm,form);
+        //--------------------console.log(datosForm);
         if(validarDatos(datosForm,form)){
             submitButton.attr('disabled', 'disabled');
             let datosFinales = {};
@@ -290,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //Validacion de datos
     function validarDatos(datos, formulario) {
       const errores = [];
-      const inputs = formulario[0].querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select');
+      const inputs = formulario[0].querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select, textarea');
       let err = 0;
     
       inputs.forEach(input => {
@@ -308,11 +341,8 @@ document.addEventListener('DOMContentLoaded', function () {
     
           // Ignorar selects ocultos
           if (!input.offsetParent) {
-            console.log(`🟡 Saltando select oculto: ${input.dataset.name}`);
             return;
           }
-    
-          console.log(`🧪 Validando SELECT: ${input.dataset.name}, texto seleccionado: "${selectedText}"`);
     
           if (wrapper) {
             if (
@@ -338,8 +368,6 @@ document.addEventListener('DOMContentLoaded', function () {
           if (input.name === 'cDocumento') {
             const select = document.querySelector('[data-name="nTipDocumento"]');
             const opcionSeleccionada = select.options[select.selectedIndex].textContent.trim();
-    
-            console.log(`🧪 Validando campo Documento con tipo: ${opcionSeleccionada}`);
     
             if (valor) {
               if (opcionSeleccionada === 'DNI') {
@@ -425,6 +453,35 @@ document.addEventListener('DOMContentLoaded', function () {
             err++;
           }
         }
+
+        // Validación de TEXTAREA
+        if (input.tagName === 'TEXTAREA') {
+          // Ignorar textareas ocultos
+          if (!input.offsetParent) {
+            return;
+          }
+
+          const wrapper = input.closest('.form__input-select-wrapper');
+          const esRequerido = input.dataset.requerido === 'required';
+          const valor = input.value.trim();
+
+          if (esRequerido && valor === '') {
+            console.log(`❌ Error en TEXTAREA requerido: ${input.name}`);
+            if (wrapper) {
+              wrapper.classList.remove('sucess-input');
+              wrapper.classList.add('error-input');
+            }
+            err++;
+          } else {
+            if (wrapper) {
+              wrapper.classList.remove('error-input');
+              wrapper.classList.add('sucess-input');
+            }
+          }
+
+          return;
+        }
+
       });
     
       if (err === 0) {
