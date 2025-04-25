@@ -61,6 +61,10 @@
   background-size: auto, auto 14rem !important;
 }
 
+.error-message{
+  font-size: 0.70rem;
+  color: red;
+}
     .form__input-radio-label{
       margin-bottom:0.5rem;
     }

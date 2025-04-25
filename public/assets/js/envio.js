@@ -345,11 +345,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
     
           if (wrapper) {
-            if (
-              selectedText === '' ||
-              selectedText.toLowerCase().includes('tipo') ||
-              input.selectedIndex === 0
-            ) {
+            if (selectedText === '' || selectedText.toLowerCase().includes('tipo') || input.selectedIndex === 0) {
               console.log(`❌ Error en SELECT tipo: ${input.dataset.name}`);
               wrapper.classList.remove('sucess-input');
               wrapper.classList.add('error-input');
@@ -362,97 +358,117 @@ document.addEventListener('DOMContentLoaded', function () {
     
           return;
         }
-    
+//-----------    
+       // Función para mostrar mensajes de error debajo del input
+        function mostrarError(input, mensaje) {
+          const contenedor = input.parentElement;
+
+          // Eliminar mensaje anterior si existe
+          const errorExistente = contenedor.querySelector('.error-message');
+          if (errorExistente) errorExistente.remove();
+
+          // Crear nuevo mensaje
+          const errorMsg = document.createElement('p');
+          errorMsg.textContent = mensaje;
+          errorMsg.style.color = 'red';
+          errorMsg.classList.add('error-message');
+
+          contenedor.appendChild(errorMsg);
+          input.classList.add('error-input');
+          input.classList.remove('sucess-input');
+        }
+
+        // Función para limpiar mensajes de error si está correcto
+        function limpiarError(input) {
+          const contenedor = input.parentElement;
+          const errorExistente = contenedor.querySelector('.error-message');
+          if (errorExistente) errorExistente.remove();
+
+          input.classList.add('sucess-input');
+          input.classList.remove('error-input');
+        }
+
         // Validación de INPUT tipo TEXT (incluye cDocumento con reglas personalizadas)
         if (tipo === 'text') {
           if (input.name === 'cDocumento') {
             const select = document.querySelector('[data-name="nTipDocumento"]');
             const opcionSeleccionada = select.options[select.selectedIndex].textContent.trim();
-    
+
             if (valor) {
               if (opcionSeleccionada === 'DNI') {
-                if (valor.match(/^\d{8}$/)) {
-                  input.classList.add('sucess-input');
+                if (/^\d{8}$/.test(valor)) {
+                  limpiarError(input);
                 } else {
-                  console.log('❌ Error en campo DNI');
-                  input.classList.add('error-input');
+                  mostrarError(input, 'El DNI debe contener exactamente 8 dígitos numéricos.');
                   err++;
                 }
               } else if (opcionSeleccionada === 'Carnet de extranjería') {
-                if (valor.match(/^[a-zA-Z0-9]{9,}$/)) {
-                  input.classList.add('sucess-input');
+                if (/^[a-zA-Z0-9]{9,}$/.test(valor)) {
+                  limpiarError(input);
                 } else {
-                  console.log('❌ Error en campo Carnet de extranjería');
-                  input.classList.add('error-input');
+                  mostrarError(input, 'El Carnet de extranjería debe tener al menos 9 caracteres alfanuméricos.');
                   err++;
                 }
               } else if (opcionSeleccionada === 'Pasaporte') {
-                if (valor.match(/^[a-zA-Z0-9]{6,}$/)) {
-                  input.classList.add('sucess-input');
+                if (/^[a-zA-Z0-9]{6,}$/.test(valor)) {
+                  limpiarError(input);
                 } else {
-                  console.log('❌ Error en campo Pasaporte');
-                  input.classList.add('error-input');
+                  mostrarError(input, 'El Pasaporte debe tener al menos 6 caracteres alfanuméricos.');
                   err++;
                 }
               }
             } else {
-              console.log('❌ Campo Documento vacío');
-              input.classList.add('error-input');
+              mostrarError(input, 'Por favor ingresa un número de documento.');
               err++;
             }
-    
+
             return;
           }
-    
-          // Validación texto genérico
+
+          // Validación texto genérico (solo letras y espacios)
           if (valor) {
-            if (!valor.match(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/)) {
-              input.classList.add('sucess-input');
+            if (!/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/.test(valor)) {
+              limpiarError(input);
             } else {
-              console.log(`❌ Error en campo texto (caracteres inválidos): ${input.name}`);
-              input.classList.add('error-input');
+              mostrarError(input, 'Este campo solo permite letras y espacios. No uses números ni caracteres especiales.');
               err++;
             }
           } else {
-            console.log(`❌ Campo texto vacío: ${input.name}`);
-            input.classList.add('error-input');
+            mostrarError(input, 'Por favor completa la información.');
             err++;
           }
         }
-    
+
         // Validación EMAIL
         if (tipo === 'email') {
           if (valor) {
-            if (valor.match(/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/)) {
-              input.classList.add('sucess-input');
+            if (/^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(valor)) {
+              limpiarError(input);
             } else {
-              console.log(`❌ Error en campo EMAIL: ${input.name}`);
-              input.classList.add('error-input');
+              mostrarError(input, 'Ingresa un correo electrónico válido. Ejemplo: nombre@dominio.com');
               err++;
             }
           } else {
-            console.log(`❌ Campo EMAIL vacío: ${input.name}`);
-            input.classList.add('error-input');
+            mostrarError(input, 'Por favor ingresa tu correo electrónico.');
             err++;
           }
         }
-    
-        // Validación NÚMERO (asumiendo teléfono)
+
+        // Validación NÚMERO (teléfono)
         if (tipo === 'number') {
           if (valor) {
-            if (valor.match(/^9\d{8}$/)) {
-              input.classList.add('sucess-input');
+            if (/^9\d{8}$/.test(valor)) {
+              limpiarError(input);
             } else {
-              console.log(`❌ Error en campo NÚMERO: ${input.name}`);
-              input.classList.add('error-input');
+              mostrarError(input, 'El número debe comenzar con 9 y tener exactamente 9 dígitos.');
               err++;
             }
           } else {
-            console.log(`❌ Campo NÚMERO vacío: ${input.name}`);
-            input.classList.add('error-input');
+            mostrarError(input, 'Por favor ingresa tu número de teléfono.');
             err++;
           }
         }
+//-----
 
         // Validación de TEXTAREA
         if (input.tagName === 'TEXTAREA') {
@@ -461,26 +477,40 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
           }
 
-          const wrapper = input.closest('.form__input-select-wrapper');
+          const wrapper = input.parentElement; // El div contenedor del textarea
           const esRequerido = input.dataset.requerido === 'required';
           const valor = input.value.trim();
 
+          // Eliminar mensaje de error previo si existe
+          const errorExistente = wrapper.querySelector('.error-message');
+          if (errorExistente) errorExistente.remove();
+
+          // Limpia clases previas
+          input.classList.remove('error-input', 'sucess-input');
+
           if (esRequerido && valor === '') {
             console.log(`❌ Error en TEXTAREA requerido: ${input.name}`);
-            if (wrapper) {
-              wrapper.classList.remove('sucess-input');
-              wrapper.classList.add('error-input');
-            }
+
+            // Crear el mensaje de error
+            const errorMsg = document.createElement('p');
+            errorMsg.textContent = 'Este campo es obligatorio. Por favor, completa la información.';
+            errorMsg.style.color = 'red';
+            errorMsg.classList.add('error-message');
+
+            // Insertar el mensaje justo después del textarea
+            input.insertAdjacentElement('afterend', errorMsg);
+
+            input.classList.add('error-input');
             err++;
           } else {
-            if (wrapper) {
-              wrapper.classList.remove('error-input');
-              wrapper.classList.add('sucess-input');
-            }
+            input.classList.add('sucess-input');
           }
 
           return;
         }
+
+
+
 
       });
     

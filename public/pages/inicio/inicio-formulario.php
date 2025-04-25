@@ -21,8 +21,10 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $tipo = $campo['campo_tipo'];
                     $name = $campo['campo_name'];
                     $size = $campo['campo_tamano'];
-                    echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" style="width: '.$size.'">';
-                break;
+                    echo '<div style="display: flex;flex-direction: column;width: '.$size.'">';
+                    echo '<input name="'.$name.'" placeholder="'. $plaholder.'" type="'.$tipo.'" class="form__input-select-wrapper w-input" >';
+                    echo '</div>';
+                    break;
                 case '2': //checkbox
                 $placeholder = $campo['campo_placeholder'];
                 $resaltado = $campo['check_resaltado'];
@@ -56,6 +58,7 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                         echo '<input type="hidden" data-name="'.$name_option.'" value="">';
                         }
                     echo '</div>';
+                    
                     
                     echo '<div class="form__selects oculto" style="width: 100%">';
                     foreach ($bucleOps as $option) {
@@ -134,7 +137,9 @@ $boton = carbon_get_post_meta(get_the_ID(), 'boton');
                     $name = $campo['campo_name'];
                     $size = $campo['campo_tamano'];
                     $required = $campo['check_required'] == '1' ? 'required' : '';
-                    echo '<textarea data-requerido="'.$required.'" name="'.$name.'" placeholder="'. $placeholder.'" class="form__input-select-wrapper w-input" style="width: '.$size.'"></textarea>';
+                    echo '<div style="display: flex;flex-direction: column;width: '.$size.'">';
+                    echo '<textarea data-requerido="'.$required.'" name="'.$name.'" placeholder="'. $placeholder.'" class="form__input-select-wrapper w-input"></textarea>';
+                    echo '</div>';
                     break;
             } 
         }
