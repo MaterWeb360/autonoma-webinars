@@ -299,11 +299,10 @@ document.addEventListener('DOMContentLoaded', function () {
             return false; // corta el each
           }
         });
-        //--------------------console.log(datosForm);
         validarDatos(datosForm,form);
-        //--------------------console.log(datosForm);
         if(validarDatos(datosForm,form)){
             submitButton.attr('disabled', 'disabled');
+            submitButton.attr('disabled', 'disabled').text('Enviando datos...');
             let datosFinales = {};
             for (let key in camposRequeridos) {
                 if (datosForm.hasOwnProperty(key)) {
@@ -312,9 +311,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     datosFinales[key] = "";
                 }
             }
+            
             console.log(datosFinales);
             sendDatos(action,datosFinales)
         }else{
+          
           console.log('no paso la validacion');
           submitButton.removeAttr('disabled');
         }
@@ -508,10 +509,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
           return;
         }
-
-
-
-
       });
     
       if (err === 0) {
@@ -521,8 +518,6 @@ document.addEventListener('DOMContentLoaded', function () {
         return false; // Hubo errores
       }
     }
-    
-    
     //Funcion para envio de datos
     function sendDatos(action,datosForm) {
         var typ ="http://localhost/autonoma-webinars/gracias/";
@@ -538,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function () {
           },
           success: function (data) {
             console.log(data);
-            //window.location = typ;
+            window.location = typ;
           },
           error: function (e) {
             console.log(e, e.response);
@@ -546,6 +541,119 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
   })
+
+  //validacion en tiempo real
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+
+    if (!form) return;
+
+    const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select, textarea');
+
+    inputs.forEach(input => {
+      const evento = input.tagName === 'SELECT' ? 'change' : 'input';
+
+      input.addEventListener(evento, () => {
+        const valor = input.value.trim();
+        const tipo = input.type;
+
+        const mostrarError = (mensaje) => {
+          const contenedor = input.parentElement;
+          const existente = contenedor.querySelector('.error-message');
+          if (existente) existente.remove();
+
+          const p = document.createElement('p');
+          p.className = 'error-message';
+          p.style.color = 'red';
+          p.textContent = mensaje;
+          contenedor.appendChild(p);
+
+          input.classList.add('error-input');
+          input.classList.remove('sucess-input');
+        };
+
+        const limpiarError = () => {
+          const contenedor = input.parentElement;
+          const existente = contenedor.querySelector('.error-message');
+          if (existente) existente.remove();
+
+          input.classList.remove('error-input');
+          input.classList.add('sucess-input');
+        };
+
+        // Validación SELECT
+        if (input.tagName === 'SELECT') {
+          const wrapper = input.closest('.form__input-select-wrapper');
+          const text = input.options[input.selectedIndex].textContent.trim();
+          if (!input.offsetParent) return;
+
+          if (wrapper) {
+            if (text === '' || text.toLowerCase().includes('tipo') || input.selectedIndex === 0) {
+              wrapper.classList.remove('sucess-input');
+              wrapper.classList.add('error-input');
+            } else {
+              wrapper.classList.remove('error-input');
+              wrapper.classList.add('sucess-input');
+            }
+          }
+          return;
+        }
+
+        // TEXT
+        if (tipo === 'text') {
+          if (input.name === 'cDocumento') {
+            const select = document.querySelector('[data-name="nTipDocumento"]');
+            const opcion = select.options[select.selectedIndex].textContent.trim();
+
+            if (valor) {
+              if (opcion === 'DNI' && /^\d{8}$/.test(valor)) limpiarError(input);
+              else if (opcion === 'Carnet de extranjería' && /^[a-zA-Z0-9]{9,}$/.test(valor)) limpiarError(input);
+              else if (opcion === 'Pasaporte' && /^[a-zA-Z0-9]{6,}$/.test(valor)) limpiarError(input);
+              else mostrarError('Número de documento no válido para el tipo seleccionado.');
+            } else {
+              mostrarError('Por favor ingresa un número de documento.');
+            }
+            return;
+          }
+
+          if (valor && !/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/.test(valor)) {
+            limpiarError();
+          } else {
+            mostrarError(valor ? 'Solo letras y espacios.' : 'Por favor completa la información.');
+          }
+          return;
+        }
+
+        // EMAIL
+        if (tipo === 'email') {
+          if (valor && /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(valor)) limpiarError();
+          else mostrarError(valor ? 'Correo electrónico no válido.' : 'Por favor ingresa tu correo.');
+          return;
+        }
+
+        // TELÉFONO
+        if (tipo === 'number') {
+          if (valor && /^9\d{8}$/.test(valor)) limpiarError();
+          else mostrarError(valor ? 'Número inválido. Debe comenzar con 9 y tener 9 dígitos.' : 'Por favor ingresa tu número.');
+          return;
+        }
+
+        // TEXTAREA
+        if (input.tagName === 'TEXTAREA') {
+          if (!input.offsetParent) return;
+
+          const requerido = input.dataset.requerido === 'required';
+          if (requerido && !valor) {
+            mostrarError('Este campo es obligatorio.');
+          } else {
+            limpiarError();
+          }
+        }
+      });
+    });
+  });
+
 
 
 
