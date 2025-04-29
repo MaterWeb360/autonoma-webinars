@@ -296,13 +296,14 @@ document.addEventListener('DOMContentLoaded', function () {
         form.find('input[type="checkbox"][required]').each(function() {
           if (!this.checked) {
             console.log('No se puede enviar el formulario debido a los checkboxes no marcados');
-            return false; // corta el each
+            return false;
           }
         });
-        validarDatos(datosForm,form);
-        if(validarDatos(datosForm,form)){
+        validarDatos(datosForm,form,submitButton);
+        if(validarDatos(datosForm,form,submitButton)){
+            form[0].reset();
             submitButton.attr('disabled', 'disabled');
-            submitButton.attr('disabled', 'disabled').text('Enviando datos...');
+            submitButton.text('Enviando datos...');
             let datosFinales = {};
             for (let key in camposRequeridos) {
                 if (datosForm.hasOwnProperty(key)) {
@@ -315,14 +316,13 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log(datosFinales);
             sendDatos(action,datosFinales)
         }else{
-          
           console.log('no paso la validacion');
           submitButton.removeAttr('disabled');
         }
 
     })
     //Validacion de datos
-    function validarDatos(datos, formulario) {
+    function validarDatos(datos, formulario,submitButton) {
       const errores = [];
       const inputs = formulario[0].querySelectorAll('input[type="text"], input[type="email"], input[type="number"], select, textarea');
       let err = 0;
@@ -513,6 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
     
       if (err === 0) {
         return true; // Todo validado correctamente
+        
       } else {
         console.log(`❌ Validación fallida con ${err} error(es)`);
         return false; // Hubo errores
@@ -520,7 +521,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     //Funcion para envio de datos
     function sendDatos(action,datosForm) {
-        var typ ="http://localhost/autonoma-webinars/gracias/";
+        //var typ ="http://localhost/autonoma-webinars/gracias/";
+        //var typ ="https://autonoma.performlab.co/gracias/";
+        var typ ="https://www.autonoma.pe/eventos-autonoma/gracias/";
         jQuery.ajax({
           type: "POST",
           url: action,
@@ -616,11 +619,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             return;
           }
-
-          if (valor && !/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/.test(valor)) {
+          if (valor && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(\s[a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/.test(valor)) {
             limpiarError();
           } else {
-            mostrarError(valor ? 'Solo letras y espacios.' : 'Por favor completa la información.');
+            mostrarError(valor ? 'Solo letras y un espacio entre palabras.' : 'Por favor completa la información.');
           }
           return;
         }

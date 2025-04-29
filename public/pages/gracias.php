@@ -5,7 +5,7 @@ $page = get_page_by_path('gracias');
 //var_dump($page);
 ?>
 
-<div class="hero" style="padding-bottom: 0;background-image: none; background: #fc8805">
+<div class="hero" style="padding-bottom: 5rem;background-image: none; background: #fc8805">
     <div class="padding-global">
         <div class="container-large">
             <div id="form-hero" class="hero_wrapper">
